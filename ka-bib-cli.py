@@ -4,11 +4,13 @@ from selenium import webdriver
 
 import secret
 
-def main():
-  print('start ka bib cli')
+def initdriver():
   options = webdriver.FirefoxOptions()
   options.set_headless(True)
   driver = webdriver.Firefox(options=options)
+  return driver
+
+def dotheclicks(driver):
   driver.get('https://karlsruhe.bibdia-mobil.de/?action=konto')
   usernamefield = driver.find_element_by_id('unr')
   usernamefield.clear()
@@ -19,7 +21,15 @@ def main():
   loginbutton = driver.find_element_by_id('loginbtn')
   loginbutton.click()
   assert 'Leserkonto' in driver.title
+
+def quitdriver(driver):
   driver.quit()
+
+def main():
+  print('start ka bib cli')
+  driver = initdriver()
+  dotheclicks(driver)
+  quitdriver(driver)
 
 if __name__ == '__main__':
   main()
