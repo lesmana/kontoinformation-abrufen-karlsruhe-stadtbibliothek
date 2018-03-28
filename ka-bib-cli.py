@@ -4,7 +4,9 @@ from selenium import webdriver
 
 import secret
 
-driver = webdriver.Firefox()
+options = webdriver.FirefoxOptions()
+options.set_headless(True)
+driver = webdriver.Firefox(options=options)
 driver.get('https://karlsruhe.bibdia-mobil.de/?action=konto')
 usernamefield = driver.find_element_by_id('unr')
 usernamefield.clear()
