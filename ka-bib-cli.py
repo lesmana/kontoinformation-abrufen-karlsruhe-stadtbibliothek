@@ -77,11 +77,12 @@ elif len(tables) == 2:
     #print(borrowtr.prettify())
     borrowtds = borrowtr.find_all('td')
     duedate = borrowtds[3].string
+    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
     fromlib = borrowtds[5].font['title']
     title = borrowtds[7].string.replace('\r\n', ' ')
-    print(duedate)
-    print(fromlib)
-    print(title)
+    print(f'fällig: {duedate} (in tagen: {delta.days})')
+    print('bib:', fromlib)
+    print('titel:', title)
 
 else:
   print('unexpected number of tables')
