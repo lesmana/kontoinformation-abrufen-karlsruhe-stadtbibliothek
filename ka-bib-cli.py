@@ -76,9 +76,9 @@ elif len(tables) == 2:
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
     borrowtds = borrowtr.find_all('td')
-    duedate = borrowtds[3]
-    fromlib = borrowtds[5]
-    title = borrowtds[7]
+    duedate = borrowtds[3].string
+    fromlib = borrowtds[5].font['title']
+    title = borrowtds[7].string.replace('\r\n', ' ')
     print(duedate)
     print(fromlib)
     print(title)
