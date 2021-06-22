@@ -1,35 +1,52 @@
-#! /usr/bin/env python
+#!/usr/bin/env python
 
-from selenium import webdriver
+import sys
+import requests
+import bs4
+import pprint
+import time
 
-import secret
+baseurl = 'https://karlsruhe.bibdia-mobil.de'
 
-def initdriver():
-  options = webdriver.FirefoxOptions()
-  options.set_headless(True)
-  driver = webdriver.Firefox(options=options)
-  return driver
+try:
+  user = sys.argv[1]
+except:
+  print('need argument: name of user')
+  sys.exit(1)
 
-def dotheclicks(driver):
-  driver.get('https://karlsruhe.bibdia-mobil.de/?action=konto')
-  usernamefield = driver.find_element_by_id('unr')
-  usernamefield.clear()
-  usernamefield.send_keys(secret.username)
-  passwordfield = driver.find_element_by_id('password')
-  passwordfield.clear()
-  passwordfield.send_keys(secret.password)
-  loginbutton = driver.find_element_by_id('loginbtn')
-  loginbutton.click()
-  assert 'Leserkonto' in driver.title
+#print(user)
+secretfilename = user if user.endswith('.secret') else user + '.secret'
+#print(secretfilename)
 
-def quitdriver(driver):
-  driver.quit()
+try:
+  with open(secretfilename) as secretfile:
+    username, password = secretfile.read().splitlines()
+except:
+  print('error trying to read credentials from file: ' + secretfilename)
+  sys.exit(1)
 
-def main():
-  print('start ka bib cli')
-  driver = initdriver()
-  dotheclicks(driver)
-  quitdriver(driver)
+#print(username)
+#print(password)
 
-if __name__ == '__main__':
-  main()
+session = requests.Session()
+
+formdata = {}
+formdata['action'] = 'konto'
+formdata['unr'] = username
+formdata['password'] = password
+url = baseurl + '/?action=konto'
+response = session.post(url, data=formdata)
+assert(response.status_code == 200)
+
+soup = bs4.BeautifulSoup(response.content, 'html.parser')
+
+
+
+[tableelem] = soup.find_all('table', attrs={'id': 'ausl-table'})
+#print(tableelem.prettify())
+trelems = tableelem.find_all('tr')[2:]
+if len(trelems) < 1:
+  print('seems to be nothing')
+  sys.exit()
+for trelem in trelems:
+  print(trelem.prettify())

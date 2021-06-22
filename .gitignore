@@ -1,3 +1,2 @@
-geckodriver.log
-secret.py
+*.secret
 __pycache__
