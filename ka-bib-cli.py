@@ -46,17 +46,6 @@ tables = soup.find_all('table', attrs={'class': 'tab21'})
 
 infotable = tables[0]
 
-if len(tables) == 1:
-  borrowtable = None
-elif len(tables) == 2:
-  borrowtable = tables[1]
-else:
-  print('unexpected number of tables')
-  print('maybe layout of website changed')
-  for table in tables:
-    print(table.prettify())
-  sys.exit(1)
-
 infotds = infotable.find_all('td')
 
 name = ''.join(infotds[1].stripped_strings)
@@ -78,3 +67,25 @@ if delta.days < 0:
 elif delta.days < 14:
   print(f'ausweis läuft bald ab ({validity})')
   print(f'in tagen: {delta.days}')
+
+if len(tables) == 1:
+  print('nichts ausgeliehen')
+elif len(tables) == 2:
+  borrowtable = tables[1]
+  borrowtrs = borrowtable.find_all('tr')
+  for borrowtr in borrowtrs[2:]:
+    #print(borrowtr.prettify())
+    borrowtds = borrowtr.find_all('td')
+    duedate = borrowtds[3]
+    fromlib = borrowtds[5]
+    title = borrowtds[7]
+    print(duedate)
+    print(fromlib)
+    print(title)
+
+else:
+  print('unexpected number of tables')
+  print('maybe layout of website changed')
+  for table in tables:
+    print(table.prettify())
+  sys.exit(1)
