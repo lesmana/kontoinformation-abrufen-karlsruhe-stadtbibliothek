@@ -32,15 +32,15 @@ session = requests.Session()
 
 formdata = {}
 formdata['LANG'] = 'de'
-formdata['FUNC'] = 'login'
-formdata['DUM1'] = ''
+formdata['FUNC'] = 'medk'
 formdata['BENUTZER'] = username
 formdata['PASSWORD'] = password
-url = baseurl + '/opax/login.C'
+url = baseurl + '/opax/user.C'
 response = session.post(url, data=formdata)
 assert(response.status_code == 200)
 
 soup = bs4.BeautifulSoup(response.content, 'html.parser')
 
-[tableelem] = soup.find_all('table', attrs={'class': 'tab21'})
-print(tableelem.prettify())
+tableelems = soup.find_all('table', attrs={'class': 'tab21'})
+for tableelem in tableelems:
+  print(tableelem.prettify())
