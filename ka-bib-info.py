@@ -6,6 +6,7 @@ import bs4
 import pprint
 import time
 import datetime
+import types
 
 def getargv():
   try:
@@ -16,7 +17,9 @@ def getargv():
   #print(user)
   secretfilename = user if user.endswith('.secret') else user + '.secret'
   #print(secretfilename)
-  return secretfilename
+  options = types.SimpleNamespace()
+  options.secretfilename = secretfilename
+  return options
 
 def getlogindata(secretfilename):
   try:
@@ -93,8 +96,8 @@ def extractinfo(htmlstr):
     sys.exit(1)
 
 def main():
-  secretfilename = getargv()
-  username, password = getlogindata(secretfilename)
+  options = getargv()
+  username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password)
   extractinfo(htmlstr)
 
