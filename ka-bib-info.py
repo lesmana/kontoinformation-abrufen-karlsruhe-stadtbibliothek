@@ -91,7 +91,7 @@ def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   infotable = tables[0]
-  extractuserinfo(tables[0])
+  extractuserinfo(infotable)
 
   if len(tables) == 1:
     print('nichts ausgeliehen')
