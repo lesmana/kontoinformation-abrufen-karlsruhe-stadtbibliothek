@@ -46,12 +46,7 @@ def gethtmlstr(username, password):
 
   return response.content
 
-def main():
-
-  username, password = getlogindata()
-
-  htmlstr = gethtmlstr(username, password)
-
+def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
 
   tables = soup.find_all('table', attrs={'class': 'tab21'})
@@ -102,6 +97,14 @@ def main():
     for table in tables:
       print(table.prettify())
     sys.exit(1)
+
+def main():
+
+  username, password = getlogindata()
+
+  htmlstr = gethtmlstr(username, password)
+
+  extractinfo(htmlstr)
 
 if __name__ == '__main__':
   main()
