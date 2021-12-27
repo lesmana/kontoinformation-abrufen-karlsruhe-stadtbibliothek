@@ -7,7 +7,7 @@ import pprint
 import time
 import datetime
 
-def getlogindata():
+def getargv():
   try:
     user = sys.argv[1]
   except:
@@ -16,6 +16,9 @@ def getlogindata():
   #print(user)
   secretfilename = user if user.endswith('.secret') else user + '.secret'
   #print(secretfilename)
+  return secretfilename
+
+def getlogindata(secretfilename):
   try:
     with open(secretfilename) as secretfile:
       username, password = secretfile.read().splitlines()
@@ -90,7 +93,8 @@ def extractinfo(htmlstr):
     sys.exit(1)
 
 def main():
-  username, password = getlogindata()
+  secretfilename = getargv()
+  username, password = getlogindata(secretfilename)
   htmlstr = gethtmlstr(username, password)
   extractinfo(htmlstr)
 
