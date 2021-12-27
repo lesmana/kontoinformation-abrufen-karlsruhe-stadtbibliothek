@@ -70,6 +70,19 @@ def getuserinfo(infotable):
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
 
+def getborrowinfo(borrowtable):
+    borrowtrs = borrowtable.find_all('tr')
+    for borrowtr in borrowtrs[2:]:
+      #print(borrowtr.prettify())
+      borrowtds = borrowtr.find_all('td')
+      duedate = borrowtds[3].string
+      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
+      fromlib = borrowtds[5].font['title']
+      title = borrowtds[7].string.replace('\r\n', ' ')
+      print(f'fällig: {duedate} (in tagen: {delta.days})')
+      print('bib:', fromlib)
+      print('titel:', title)
+
 def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
 
@@ -83,18 +96,7 @@ def extractinfo(htmlstr):
     print('nichts ausgeliehen')
   elif len(tables) == 2:
     borrowtable = tables[1]
-    borrowtrs = borrowtable.find_all('tr')
-    for borrowtr in borrowtrs[2:]:
-      #print(borrowtr.prettify())
-      borrowtds = borrowtr.find_all('td')
-      duedate = borrowtds[3].string
-      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
-      fromlib = borrowtds[5].font['title']
-      title = borrowtds[7].string.replace('\r\n', ' ')
-      print(f'fällig: {duedate} (in tagen: {delta.days})')
-      print('bib:', fromlib)
-      print('titel:', title)
-
+    getborrowinfo(borrowtable)
   else:
     print('unexpected number of tables')
     print('maybe layout of website changed')
