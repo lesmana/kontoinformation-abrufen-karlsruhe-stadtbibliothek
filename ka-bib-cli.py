@@ -7,9 +7,7 @@ import pprint
 import time
 import datetime
 
-def main():
-  baseurl = 'https://opac.karlsruhe.de'
-
+def getlogindata():
   try:
     user = sys.argv[1]
   except:
@@ -26,6 +24,13 @@ def main():
   except:
     print('error trying to read credentials from file: ' + secretfilename)
     sys.exit(1)
+
+  return username, password
+
+def main():
+  baseurl = 'https://opac.karlsruhe.de'
+
+  username, password = getlogindata()
 
   #print(username)
   #print(password)
