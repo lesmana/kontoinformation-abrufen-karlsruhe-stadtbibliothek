@@ -7,86 +7,90 @@ import pprint
 import time
 import datetime
 
-baseurl = 'https://opac.karlsruhe.de'
+def main():
+  baseurl = 'https://opac.karlsruhe.de'
 
-try:
-  user = sys.argv[1]
-except:
-  print('need argument: name of user')
-  sys.exit(1)
+  try:
+    user = sys.argv[1]
+  except:
+    print('need argument: name of user')
+    sys.exit(1)
 
-#print(user)
-secretfilename = user if user.endswith('.secret') else user + '.secret'
-#print(secretfilename)
+  #print(user)
+  secretfilename = user if user.endswith('.secret') else user + '.secret'
+  #print(secretfilename)
 
-try:
-  with open(secretfilename) as secretfile:
-    username, password = secretfile.read().splitlines()
-except:
-  print('error trying to read credentials from file: ' + secretfilename)
-  sys.exit(1)
+  try:
+    with open(secretfilename) as secretfile:
+      username, password = secretfile.read().splitlines()
+  except:
+    print('error trying to read credentials from file: ' + secretfilename)
+    sys.exit(1)
 
-#print(username)
-#print(password)
+  #print(username)
+  #print(password)
 
-session = requests.Session()
+  session = requests.Session()
 
-formdata = {}
-formdata['LANG'] = 'de'
-formdata['FUNC'] = 'medk'
-formdata['BENUTZER'] = username
-formdata['PASSWORD'] = password
-url = baseurl + '/opax/user.C'
-response = session.post(url, data=formdata)
-assert(response.status_code == 200)
+  formdata = {}
+  formdata['LANG'] = 'de'
+  formdata['FUNC'] = 'medk'
+  formdata['BENUTZER'] = username
+  formdata['PASSWORD'] = password
+  url = baseurl + '/opax/user.C'
+  response = session.post(url, data=formdata)
+  assert(response.status_code == 200)
 
-soup = bs4.BeautifulSoup(response.content, 'html.parser')
+  soup = bs4.BeautifulSoup(response.content, 'html.parser')
 
-tables = soup.find_all('table', attrs={'class': 'tab21'})
+  tables = soup.find_all('table', attrs={'class': 'tab21'})
 
-infotable = tables[0]
+  infotable = tables[0]
 
-infotds = infotable.find_all('td')
+  infotds = infotable.find_all('td')
 
-name = ''.join(infotds[1].stripped_strings)
-print('name', name)
+  name = ''.join(infotds[1].stripped_strings)
+  print('name', name)
 
-fee = ''.join(infotds[2].stripped_strings)
-if fee != '':
-  print('gebühren', fee)
+  fee = ''.join(infotds[2].stripped_strings)
+  if fee != '':
+    print('gebühren', fee)
 
-validity = ''.join(infotds[5].stripped_strings)
-_, validity = validity.split()
-delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - datetime.datetime.today()
-#print(validity)
-#print(delta.days)
+  validity = ''.join(infotds[5].stripped_strings)
+  _, validity = validity.split()
+  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - datetime.datetime.today()
+  #print(validity)
+  #print(delta.days)
 
-if delta.days < 0:
-  print(f'ausweis abgelaufen ({validity})')
-  print(f'in tagen: {delta.days}')
-elif delta.days < 14:
-  print(f'ausweis läuft bald ab ({validity})')
-  print(f'in tagen: {delta.days}')
+  if delta.days < 0:
+    print(f'ausweis abgelaufen ({validity})')
+    print(f'in tagen: {delta.days}')
+  elif delta.days < 14:
+    print(f'ausweis läuft bald ab ({validity})')
+    print(f'in tagen: {delta.days}')
 
-if len(tables) == 1:
-  print('nichts ausgeliehen')
-elif len(tables) == 2:
-  borrowtable = tables[1]
-  borrowtrs = borrowtable.find_all('tr')
-  for borrowtr in borrowtrs[2:]:
-    #print(borrowtr.prettify())
-    borrowtds = borrowtr.find_all('td')
-    duedate = borrowtds[3].string
-    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
-    fromlib = borrowtds[5].font['title']
-    title = borrowtds[7].string.replace('\r\n', ' ')
-    print(f'fällig: {duedate} (in tagen: {delta.days})')
-    print('bib:', fromlib)
-    print('titel:', title)
+  if len(tables) == 1:
+    print('nichts ausgeliehen')
+  elif len(tables) == 2:
+    borrowtable = tables[1]
+    borrowtrs = borrowtable.find_all('tr')
+    for borrowtr in borrowtrs[2:]:
+      #print(borrowtr.prettify())
+      borrowtds = borrowtr.find_all('td')
+      duedate = borrowtds[3].string
+      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
+      fromlib = borrowtds[5].font['title']
+      title = borrowtds[7].string.replace('\r\n', ' ')
+      print(f'fällig: {duedate} (in tagen: {delta.days})')
+      print('bib:', fromlib)
+      print('titel:', title)
 
-else:
-  print('unexpected number of tables')
-  print('maybe layout of website changed')
-  for table in tables:
-    print(table.prettify())
-  sys.exit(1)
+  else:
+    print('unexpected number of tables')
+    print('maybe layout of website changed')
+    for table in tables:
+      print(table.prettify())
+    sys.exit(1)
+
+if __name__ == '__main__':
+  main()
