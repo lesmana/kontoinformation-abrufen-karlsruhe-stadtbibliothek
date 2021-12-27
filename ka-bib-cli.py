@@ -47,22 +47,17 @@ def gethtmlstr(username, password):
   return response.content
 
 def getuserinfo(infotable):
-
   infotds = infotable.find_all('td')
-
   name = ''.join(infotds[1].stripped_strings)
   print('name', name)
-
   fee = ''.join(infotds[2].stripped_strings)
   if fee != '':
     print('gebühren', fee)
-
   validity = ''.join(infotds[5].stripped_strings)
   _, validity = validity.split()
   delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - datetime.datetime.today()
   #print(validity)
   #print(delta.days)
-
   if delta.days < 0:
     print(f'ausweis abgelaufen ({validity})')
     print(f'in tagen: {delta.days}')
