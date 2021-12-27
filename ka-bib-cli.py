@@ -85,11 +85,8 @@ def getborrowinfo(borrowtable):
 
 def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-
   tables = soup.find_all('table', attrs={'class': 'tab21'})
-
   infotable = tables[0]
-
   getuserinfo(tables[0])
 
   if len(tables) == 1:
