@@ -7,19 +7,20 @@ import pprint
 import time
 import datetime
 import types
+import argparse
 
 def getargv(argv):
-  try:
-    user = argv[1]
-  except:
-    print('need argument: name of user')
-    sys.exit(1)
-  #print(user)
-  secretfilename = user if user.endswith('.secret') else user + '.secret'
-  #print(secretfilename)
-  options = types.SimpleNamespace()
-  options.secretfilename = secretfilename
-  return options
+  class HandleUsername(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+      secretfilename = values if values.endswith('.secret') else values + '.secret'
+      namespace.secretfilename = secretfilename
+  parser = argparse.ArgumentParser()
+  parser.add_argument('username', action=HandleUsername,
+        help='name of user to get info for')
+  parser.add_argument('--dumphtml', action='store_true',
+        help='just dump html instead extracting info')
+  args = parser.parse_args()
+  return args
 
 def getlogindata(secretfilename):
   try:
