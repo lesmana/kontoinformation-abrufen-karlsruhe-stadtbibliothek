@@ -71,17 +71,17 @@ def getuserinfo(infotable):
     print(f'in tagen: {delta.days}')
 
 def getborrowinfo(borrowtable):
-    borrowtrs = borrowtable.find_all('tr')
-    for borrowtr in borrowtrs[2:]:
-      #print(borrowtr.prettify())
-      borrowtds = borrowtr.find_all('td')
-      duedate = borrowtds[3].string
-      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
-      fromlib = borrowtds[5].font['title']
-      title = borrowtds[7].string.replace('\r\n', ' ')
-      print(f'fällig: {duedate} (in tagen: {delta.days})')
-      print('bib:', fromlib)
-      print('titel:', title)
+  borrowtrs = borrowtable.find_all('tr')
+  for borrowtr in borrowtrs[2:]:
+    #print(borrowtr.prettify())
+    borrowtds = borrowtr.find_all('td')
+    duedate = borrowtds[3].string
+    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
+    fromlib = borrowtds[5].font['title']
+    title = borrowtds[7].string.replace('\r\n', ' ')
+    print(f'fällig: {duedate} (in tagen: {delta.days})')
+    print('bib:', fromlib)
+    print('titel:', title)
 
 def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
