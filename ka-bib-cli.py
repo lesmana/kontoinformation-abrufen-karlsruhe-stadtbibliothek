@@ -46,12 +46,7 @@ def gethtmlstr(username, password):
 
   return response.content
 
-def extractinfo(htmlstr):
-  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-
-  tables = soup.find_all('table', attrs={'class': 'tab21'})
-
-  infotable = tables[0]
+def getuserinfo(infotable):
 
   infotds = infotable.find_all('td')
 
@@ -74,6 +69,15 @@ def extractinfo(htmlstr):
   elif delta.days < 14:
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
+
+def extractinfo(htmlstr):
+  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+
+  tables = soup.find_all('table', attrs={'class': 'tab21'})
+
+  infotable = tables[0]
+
+  getuserinfo(tables[0])
 
   if len(tables) == 1:
     print('nichts ausgeliehen')
