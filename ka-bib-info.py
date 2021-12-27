@@ -8,9 +8,9 @@ import time
 import datetime
 import types
 
-def getargv():
+def getargv(argv):
   try:
-    user = sys.argv[1]
+    user = argv[1]
   except:
     print('need argument: name of user')
     sys.exit(1)
@@ -96,7 +96,7 @@ def extractinfo(htmlstr):
     sys.exit(1)
 
 def main():
-  options = getargv()
+  options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password)
   extractinfo(htmlstr)
