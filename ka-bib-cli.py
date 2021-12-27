@@ -13,21 +13,17 @@ def getlogindata():
   except:
     print('need argument: name of user')
     sys.exit(1)
-
   #print(user)
   secretfilename = user if user.endswith('.secret') else user + '.secret'
   #print(secretfilename)
-
   try:
     with open(secretfilename) as secretfile:
       username, password = secretfile.read().splitlines()
   except:
     print('error trying to read credentials from file: ' + secretfilename)
     sys.exit(1)
-
   #print(username)
   #print(password)
-
   return username, password
 
 def gethtmlstr(username, password):
