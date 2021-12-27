@@ -99,11 +99,8 @@ def extractinfo(htmlstr):
     sys.exit(1)
 
 def main():
-
   username, password = getlogindata()
-
   htmlstr = gethtmlstr(username, password)
-
   extractinfo(htmlstr)
 
 if __name__ == '__main__':
