@@ -39,7 +39,7 @@ def gethtmlstr(username, password):
   assert(response.status_code == 200)
   return response.content
 
-def getuserinfo(infotable):
+def extractuserinfo(infotable):
   infotds = infotable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
   print('name', name)
@@ -58,7 +58,7 @@ def getuserinfo(infotable):
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
 
-def getborrowinfo(borrowtable):
+def extractborrowinfo(borrowtable):
   borrowtrs = borrowtable.find_all('tr')
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
@@ -75,13 +75,13 @@ def extractinfo(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   infotable = tables[0]
-  getuserinfo(tables[0])
+  extractuserinfo(tables[0])
 
   if len(tables) == 1:
     print('nichts ausgeliehen')
   elif len(tables) == 2:
     borrowtable = tables[1]
-    getborrowinfo(borrowtable)
+    extractborrowinfo(borrowtable)
   else:
     print('unexpected number of tables')
     print('maybe layout of website changed')
