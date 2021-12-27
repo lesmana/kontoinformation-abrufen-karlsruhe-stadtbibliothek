@@ -27,13 +27,8 @@ def getlogindata():
 
   return username, password
 
-def main():
+def gethtmlstr(username, password):
   baseurl = 'https://opac.karlsruhe.de'
-
-  username, password = getlogindata()
-
-  #print(username)
-  #print(password)
 
   session = requests.Session()
 
@@ -46,7 +41,18 @@ def main():
   response = session.post(url, data=formdata)
   assert(response.status_code == 200)
 
-  soup = bs4.BeautifulSoup(response.content, 'html.parser')
+  return response.content
+
+def main():
+
+  username, password = getlogindata()
+
+  #print(username)
+  #print(password)
+
+  htmlstr = gethtmlstr(username, password)
+
+  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
 
   tables = soup.find_all('table', attrs={'class': 'tab21'})
 
