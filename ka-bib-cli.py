@@ -32,9 +32,7 @@ def getlogindata():
 
 def gethtmlstr(username, password):
   baseurl = 'https://opac.karlsruhe.de'
-
   session = requests.Session()
-
   formdata = {}
   formdata['LANG'] = 'de'
   formdata['FUNC'] = 'medk'
@@ -43,7 +41,6 @@ def gethtmlstr(username, password):
   url = baseurl + '/opax/user.C'
   response = session.post(url, data=formdata)
   assert(response.status_code == 200)
-
   return response.content
 
 def getuserinfo(infotable):
