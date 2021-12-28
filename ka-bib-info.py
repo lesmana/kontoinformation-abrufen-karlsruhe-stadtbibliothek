@@ -51,7 +51,7 @@ def gethtmlstr(username, password, url):
 def gettables(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   tables = soup.find_all('table', attrs={'class': 'tab21'})
-  infotable = tables[0]
+  usertable = tables[0]
   if len(tables) == 1:
     borrowtable = None
   elif len(tables) == 2:
@@ -62,15 +62,15 @@ def gettables(htmlstr):
     for table in tables:
       print(table.prettify())
     sys.exit(1)
-  return infotable, borrowtable
+  return usertable, borrowtable
 
-def dumphtml(infotable, borrowtable):
-  print(infotable.prettify())
+def dumphtml(usertable, borrowtable):
+  print(usertable.prettify())
   if borrowtable is not None:
     print(borrowtable.prettify())
 
-def printuserinfo(infotable, today):
-  infotds = infotable.find_all('td')
+def printuserinfo(usertable, today):
+  infotds = usertable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
   print('name', name)
   fee = ''.join(infotds[2].stripped_strings)
@@ -101,8 +101,8 @@ def printborrowinfo(borrowtable, today):
     print('bib:', fromlib)
     print('titel:', title)
 
-def printinfo(infotable, borrowtable, today):
-  printuserinfo(infotable, today)
+def printinfo(usertable, borrowtable, today):
+  printuserinfo(usertable, today)
   if borrowtable is not None:
     printborrowinfo(borrowtable, today)
   else:
@@ -112,12 +112,12 @@ def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password, options.url)
-  infotable, borrowtable = gettables(htmlstr)
+  usertable, borrowtable = gettables(htmlstr)
   if options.dumphtml:
-    dumphtml(infotable, borrowtable)
+    dumphtml(usertable, borrowtable)
   else:
     today = datetime.datetime.today()
-    printinfo(infotable, borrowtable, today)
+    printinfo(usertable, borrowtable, today)
 
 if __name__ == '__main__':
   main()
