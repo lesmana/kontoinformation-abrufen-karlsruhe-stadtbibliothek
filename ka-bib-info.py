@@ -36,11 +36,12 @@ def getlogindata(secretfilename):
 def gethtmlstr(username, password):
   baseurl = 'https://opac.karlsruhe.de'
   session = requests.Session()
-  formdata = {}
-  formdata['LANG'] = 'de'
-  formdata['FUNC'] = 'medk'
-  formdata['BENUTZER'] = username
-  formdata['PASSWORD'] = password
+  formdata = {
+    'LANG': 'de',
+    'FUNC': 'medk',
+    'BENUTZER': username,
+    'PASSWORD': password
+  }
   url = baseurl + '/opax/user.C'
   response = session.post(url, data=formdata)
   assert(response.status_code == 200)
