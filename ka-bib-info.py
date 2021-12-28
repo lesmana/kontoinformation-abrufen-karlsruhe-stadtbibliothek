@@ -63,26 +63,23 @@ def dumphtml(usertable, borrowtable):
   if borrowtable is not None:
     print(borrowtable.prettify())
 
-def printuserinfo(usertable, today):
+def getuserinfo(usertable, today):
+  userinfo = {}
   infotds = usertable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
-  print('name', name)
+  userinfo['name'] = name
   fee = ''.join(infotds[2].stripped_strings)
   if fee != '':
-    print('gebühren', fee)
+    userinfo['fee'] = fee
   validity = ''.join(infotds[5].stripped_strings)
   _, validity = validity.split()
   delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - today
-  #print(validity)
-  #print(delta.days)
-  if delta.days < 0:
-    print(f'ausweis abgelaufen ({validity})')
-    print(f'in tagen: {delta.days}')
-  elif delta.days < 14:
-    print(f'ausweis läuft bald ab ({validity})')
-    print(f'in tagen: {delta.days}')
+  userinfo['validity'] = validity
+  userinfo['days'] = delta.days
+  return userinfo
 
-def printborrowinfo(borrowtable, today):
+def getborrowinfo(borrowtable, today):
+  borrowinfo = []
   borrowtrs = borrowtable.find_all('tr')
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
@@ -91,16 +88,45 @@ def printborrowinfo(borrowtable, today):
     delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
     fromlib = borrowtds[5].font['title']
     title = borrowtds[7].string.replace('\r\n', ' ')
-    print(f'fällig: {duedate} (in tagen: {delta.days})')
-    print('bib:', fromlib)
-    print('titel:', title)
+    item = {
+      'duedate': duedate,
+      'days': delta.days,
+      'fromlib': fromlib,
+      'title': title
+    }
+    borrowinfo.append(item)
+  return borrowinfo
+
+def getinfo(usertable, borrowtable, today):
+  userinfo = getuserinfo(usertable, today)
+  if borrowtable is not None:
+    borrowinfo = getborrowinfo(borrowtable, today)
+  else:
+    borrowinfo = []
+  info = {'user': userinfo, 'borrow': borrowinfo}
+  return info
 
 def printinfo(usertable, borrowtable, today):
-  printuserinfo(usertable, today)
-  if borrowtable is not None:
-    printborrowinfo(borrowtable, today)
-  else:
+  info = getinfo(usertable, borrowtable, today)
+
+  userinfo = info['user']
+  print('name', userinfo['name'])
+  if 'fee' in userinfo:
+    print('gebühren', userinfo['fee'])
+  if userinfo['days'] < 0:
+    print(f'ausweis abgelaufen ({userinfo["validity"]})')
+    print(f'in tagen: {userinfo["days"]}')
+  elif userinfo['days'] < 14:
+    print(f'ausweis läuft bald ab ({userinfo["validity"]})')
+    print(f'in tagen: {userinfo["days"]}')
+
+  if len(info['borrow']) == 0:
     print('nichts ausgeliehen')
+  else:
+    for item in info['borrow']:
+      print(f'fällig: {item["duedate"]} (in tagen: {item["days"]})')
+      print('bib:', item['fromlib'])
+      print('titel:', item['title'])
 
 def main():
   options = getargv(sys.argv)
