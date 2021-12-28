@@ -51,13 +51,22 @@ def gethtmlstr(username, password, url):
 def gettables(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   tables = soup.find_all('table', attrs={'class': 'tab21'})
-  return tables
-
-def dumphtml(tables):
   infotable = tables[0]
-  print(infotable.prettify())
-  if len(tables) == 2:
+  if len(tables) == 1:
+    borrowtable = None
+  elif len(tables) == 2:
     borrowtable = tables[1]
+  else:
+    print('unexpected number of tables')
+    print('maybe layout of website changed')
+    for table in tables:
+      print(table.prettify())
+    sys.exit(1)
+  return infotable, borrowtable
+
+def dumphtml(infotable, borrowtable):
+  print(infotable.prettify())
+  if borrowtable is not None:
     print(borrowtable.prettify())
 
 def extractuserinfo(infotable, today):
@@ -92,32 +101,23 @@ def extractborrowinfo(borrowtable, today):
     print('bib:', fromlib)
     print('titel:', title)
 
-def printinfo(tables, today):
-  infotable = tables[0]
+def printinfo(infotable, borrowtable, today):
   extractuserinfo(infotable, today)
-
-  if len(tables) == 1:
-    print('nichts ausgeliehen')
-  elif len(tables) == 2:
-    borrowtable = tables[1]
+  if borrowtable is not None:
     extractborrowinfo(borrowtable, today)
   else:
-    print('unexpected number of tables')
-    print('maybe layout of website changed')
-    for table in tables:
-      print(table.prettify())
-    sys.exit(1)
+    print('nichts ausgeliehen')
 
 def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password, options.url)
-  tables = gettables(htmlstr)
+  infotable, borrowtable = gettables(htmlstr)
   if options.dumphtml:
-    dumphtml(tables)
+    dumphtml(infotable, borrowtable)
   else:
     today = datetime.datetime.today()
-    printinfo(tables, today)
+    printinfo(infotable, borrowtable, today)
 
 if __name__ == '__main__':
   main()
