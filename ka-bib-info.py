@@ -92,7 +92,7 @@ def extractborrowinfo(borrowtable, today):
     print('bib:', fromlib)
     print('titel:', title)
 
-def extractinfo(tables, today):
+def printinfo(tables, today):
   infotable = tables[0]
   extractuserinfo(infotable, today)
 
@@ -117,7 +117,7 @@ def main():
     dumphtml(tables)
   else:
     today = datetime.datetime.today()
-    extractinfo(tables, today)
+    printinfo(tables, today)
 
 if __name__ == '__main__':
   main()
