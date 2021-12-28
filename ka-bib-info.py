@@ -9,6 +9,8 @@ import datetime
 import types
 import argparse
 
+url = 'https://opac.karlsruhe.de/opax/user.C'
+
 def getargv(argv):
   class HandleUsername(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -20,6 +22,7 @@ def getargv(argv):
   parser.add_argument('--dumphtml', action='store_true',
         help='just dump html instead extracting info')
   args = parser.parse_args()
+  args.url = url
   return args
 
 def getlogindata(secretfilename):
@@ -33,7 +36,7 @@ def getlogindata(secretfilename):
   #print(password)
   return username, password
 
-def gethtmlstr(username, password):
+def gethtmlstr(username, password, url):
   session = requests.Session()
   formdata = {
     'LANG': 'de',
@@ -41,7 +44,6 @@ def gethtmlstr(username, password):
     'BENUTZER': username,
     'PASSWORD': password
   }
-  url = 'https://opac.karlsruhe.de/opax/user.C'
   response = session.post(url, data=formdata)
   assert(response.status_code == 200)
   return response.content
@@ -109,7 +111,7 @@ def extractinfo(tables):
 def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
-  htmlstr = gethtmlstr(username, password)
+  htmlstr = gethtmlstr(username, password, options.url)
   tables = gettables(htmlstr)
   if options.dumphtml:
     dumphtml(tables)
