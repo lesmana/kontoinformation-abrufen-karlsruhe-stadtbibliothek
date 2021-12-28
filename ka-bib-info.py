@@ -46,9 +46,12 @@ def gethtmlstr(username, password):
   assert(response.status_code == 200)
   return response.content
 
-def dumphtml(htmlstr):
+def gettables(htmlstr):
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   tables = soup.find_all('table', attrs={'class': 'tab21'})
+  return tables
+
+def dumphtml(tables):
   infotable = tables[0]
   print(infotable.prettify())
   if len(tables) == 2:
@@ -87,9 +90,7 @@ def extractborrowinfo(borrowtable):
     print('bib:', fromlib)
     print('titel:', title)
 
-def extractinfo(htmlstr):
-  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-  tables = soup.find_all('table', attrs={'class': 'tab21'})
+def extractinfo(tables):
   infotable = tables[0]
   extractuserinfo(infotable)
 
@@ -109,10 +110,11 @@ def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password)
+  tables = gettables(htmlstr)
   if options.dumphtml:
-    dumphtml(htmlstr)
+    dumphtml(tables)
   else:
-    extractinfo(htmlstr)
+    extractinfo(tables)
 
 if __name__ == '__main__':
   main()
