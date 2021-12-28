@@ -31,7 +31,6 @@ def getlogindata(secretfilename):
       username, password = secretfile.read().splitlines()
   except:
     raise Exception('error trying to read credentials from file', secretfilename)
-    sys.exit(1)
   return username, password
 
 def gethtmlstr(username, password, url):
