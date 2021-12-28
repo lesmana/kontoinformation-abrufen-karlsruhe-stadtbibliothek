@@ -1,6 +1,13 @@
-liste der medien ausgeliehen von karlsruhe stadtbibliothek
+karlsruhe stadtbibliothek ausleih info
+======================================
+
+ein kleines werkzeug um die ausleih info
+der karlsruhe stadtbibliothek zu holen
 
 mit requests und beautifulsoup
+
+technische details
+------------------
 
 ka bib hat zwei konto einsicht urls
 
@@ -11,7 +18,9 @@ und
 https://karlsruhe.bibdia-mobil.de/
 
 erste ist offiziell auf webseite verlinkt
-zweite ist wird angeboten wenn mit smartphone auf erste link
+zweite wird angeboten wenn mit smartphone auf erste link
 
 erste hat mehr information
 z.b. ob karte abgelaufen ist
+
+im moment im werkzeug verwendet wird erste link
