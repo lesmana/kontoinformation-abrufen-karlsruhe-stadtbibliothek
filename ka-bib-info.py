@@ -69,7 +69,7 @@ def dumphtml(infotable, borrowtable):
   if borrowtable is not None:
     print(borrowtable.prettify())
 
-def extractuserinfo(infotable, today):
+def printuserinfo(infotable, today):
   infotds = infotable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
   print('name', name)
@@ -88,7 +88,7 @@ def extractuserinfo(infotable, today):
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
 
-def extractborrowinfo(borrowtable, today):
+def printborrowinfo(borrowtable, today):
   borrowtrs = borrowtable.find_all('tr')
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
@@ -102,9 +102,9 @@ def extractborrowinfo(borrowtable, today):
     print('titel:', title)
 
 def printinfo(infotable, borrowtable, today):
-  extractuserinfo(infotable, today)
+  printuserinfo(infotable, today)
   if borrowtable is not None:
-    extractborrowinfo(borrowtable, today)
+    printborrowinfo(borrowtable, today)
   else:
     print('nichts ausgeliehen')
 
