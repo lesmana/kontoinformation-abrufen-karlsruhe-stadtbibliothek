@@ -60,7 +60,7 @@ def dumphtml(tables):
     borrowtable = tables[1]
     print(borrowtable.prettify())
 
-def extractuserinfo(infotable):
+def extractuserinfo(infotable, today):
   infotds = infotable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
   print('name', name)
@@ -69,7 +69,7 @@ def extractuserinfo(infotable):
     print('gebühren', fee)
   validity = ''.join(infotds[5].stripped_strings)
   _, validity = validity.split()
-  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - datetime.datetime.today()
+  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - today
   #print(validity)
   #print(delta.days)
   if delta.days < 0:
@@ -79,28 +79,28 @@ def extractuserinfo(infotable):
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
 
-def extractborrowinfo(borrowtable):
+def extractborrowinfo(borrowtable, today):
   borrowtrs = borrowtable.find_all('tr')
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
     borrowtds = borrowtr.find_all('td')
     duedate = borrowtds[3].string
-    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - datetime.datetime.today()
+    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
     fromlib = borrowtds[5].font['title']
     title = borrowtds[7].string.replace('\r\n', ' ')
     print(f'fällig: {duedate} (in tagen: {delta.days})')
     print('bib:', fromlib)
     print('titel:', title)
 
-def extractinfo(tables):
+def extractinfo(tables, today):
   infotable = tables[0]
-  extractuserinfo(infotable)
+  extractuserinfo(infotable, today)
 
   if len(tables) == 1:
     print('nichts ausgeliehen')
   elif len(tables) == 2:
     borrowtable = tables[1]
-    extractborrowinfo(borrowtable)
+    extractborrowinfo(borrowtable, today)
   else:
     print('unexpected number of tables')
     print('maybe layout of website changed')
@@ -116,7 +116,8 @@ def main():
   if options.dumphtml:
     dumphtml(tables)
   else:
-    extractinfo(tables)
+    today = datetime.datetime.today()
+    extractinfo(tables, today)
 
 if __name__ == '__main__':
   main()
