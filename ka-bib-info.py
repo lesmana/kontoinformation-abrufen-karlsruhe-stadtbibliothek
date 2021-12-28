@@ -30,7 +30,7 @@ def getlogindata(secretfilename):
     with open(secretfilename) as secretfile:
       username, password = secretfile.read().splitlines()
   except:
-    print('error trying to read credentials from file: ' + secretfilename)
+    raise Exception('error trying to read credentials from file', secretfilename)
     sys.exit(1)
   #print(username)
   #print(password)
@@ -45,7 +45,8 @@ def gethtmlstr(username, password, url):
     'PASSWORD': password
   }
   response = session.post(url, data=formdata)
-  assert(response.status_code == 200)
+  if response.status_code != 200:
+    raise Exception('response status code not 200', response)
   return response.content
 
 def gettables(htmlstr):
@@ -57,11 +58,7 @@ def gettables(htmlstr):
   elif len(tables) == 2:
     borrowtable = tables[1]
   else:
-    print('unexpected number of tables')
-    print('maybe layout of website changed')
-    for table in tables:
-      print(table.prettify())
-    sys.exit(1)
+    raise Exception('unexpected number of tables', tables)
   return usertable, borrowtable
 
 def dumphtml(usertable, borrowtable):
