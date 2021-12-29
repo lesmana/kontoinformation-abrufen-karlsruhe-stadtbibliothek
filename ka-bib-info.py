@@ -122,10 +122,11 @@ def printinfo(info, today):
     print(f'ausweis läuft bald ab ({expire})')
     print(f'in tagen: {delta.days}')
 
-  if len(info['item']) == 0:
+  iteminfo = info['item']
+  if len(iteminfo) == 0:
     print('nichts ausgeliehen')
   else:
-    for item in info['item']:
+    for item in iteminfo:
       duedate = item["duedate"]
       delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
       print(f'fällig: {duedate} (in tagen: {delta.days})')
