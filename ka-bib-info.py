@@ -71,8 +71,9 @@ def getuserinfo(usertable):
   infotds = usertable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
   userinfo['name'] = name
-  fee = ''.join(infotds[2].stripped_strings)
-  if fee != '':
+  feestr = ''.join(infotds[2].stripped_strings)
+  if feestr != '':
+    fee, _ = feestr.split()
     userinfo['fee'] = fee
   expirestr = ''.join(infotds[5].stripped_strings)
   _, expire = expirestr.split()
@@ -111,7 +112,7 @@ def printjson(info):
 def printuserinfo(userinfo, today):
   print('name', userinfo['name'])
   if 'fee' in userinfo:
-    print('gebühren', userinfo['fee'])
+    print('gebühren', userinfo['fee'], '€')
   expire = userinfo["expire"]
   delta = datetime.datetime.strptime(expire, '%d.%m.%Y') - today
   if delta.days < 0:

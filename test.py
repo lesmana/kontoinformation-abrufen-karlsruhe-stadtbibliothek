@@ -40,7 +40,7 @@ class TestGetUserInfo(unittest.TestCase):
     userinfo = t.getuserinfo(infotable)
     expecteduserinfo = {
       'name': 'voller name',
-      'fee': '3,50 €',
+      'fee': '3,50',
       'expire': 'datum-noch-gültig'
     }
     self.assertEqual(userinfo, expecteduserinfo)
