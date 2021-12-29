@@ -133,10 +133,10 @@ def main():
   usertable, borrowtable = gettables(htmlstr)
   if options.dumphtml:
     dumphtml(usertable, borrowtable)
-  else:
-    info = getinfo(usertable, borrowtable)
-    today = datetime.datetime.today()
-    printinfo(info, today)
+    return
+  info = getinfo(usertable, borrowtable)
+  today = datetime.datetime.today()
+  printinfo(info, today)
 
 if __name__ == '__main__':
   main()
