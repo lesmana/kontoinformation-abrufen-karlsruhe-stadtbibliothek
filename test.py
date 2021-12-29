@@ -12,6 +12,9 @@ with open('testfiles/ausweis-ok.html') as openfile:
 with open('testfiles/ausweis-abgelaufen.html') as openfile:
   ausweis_abgelaufen_html = openfile.read()
 
+with open('testfiles/ausweis-gebuehren.html') as openfile:
+  ausweis_gebuehren_html = openfile.read()
+
 class TestGetUserInfo(unittest.TestCase):
 
   def test_ok(self):
@@ -29,6 +32,16 @@ class TestGetUserInfo(unittest.TestCase):
     expecteduserinfo = {
       'name': 'voller name',
       'expire': 'datum-abgelaufen'
+    }
+    self.assertEqual(userinfo, expecteduserinfo)
+
+  def test_gebuehren(self):
+    infotable =  bs4.BeautifulSoup(ausweis_gebuehren_html, 'html.parser')
+    userinfo = t.getuserinfo(infotable)
+    expecteduserinfo = {
+      'name': 'voller name',
+      'fee': '3,50 €',
+      'expire': 'datum-noch-gültig'
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
