@@ -74,9 +74,9 @@ def getuserinfo(usertable):
   fee = ''.join(infotds[2].stripped_strings)
   if fee != '':
     userinfo['fee'] = fee
-  validity = ''.join(infotds[5].stripped_strings)
-  _, validity = validity.split()
-  userinfo['validity'] = validity
+  expire = ''.join(infotds[5].stripped_strings)
+  _, expire = expire.split()
+  userinfo['expire'] = expire
   return userinfo
 
 def getiteminfo(itemtable):
@@ -113,13 +113,13 @@ def printinfo(info, today):
   print('name', userinfo['name'])
   if 'fee' in userinfo:
     print('gebühren', userinfo['fee'])
-  validity = userinfo["validity"]
-  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - today
+  expire = userinfo["expire"]
+  delta = datetime.datetime.strptime(expire, '%d.%m.%Y') - today
   if delta.days < 0:
-    print(f'ausweis abgelaufen ({validity})')
+    print(f'ausweis abgelaufen ({expire})')
     print(f'in tagen: {delta.days}')
   elif delta.days < 14:
-    print(f'ausweis läuft bald ab ({validity})')
+    print(f'ausweis läuft bald ab ({expire})')
     print(f'in tagen: {delta.days}')
 
   if len(info['item']) == 0:
