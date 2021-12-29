@@ -54,17 +54,17 @@ def gettables(htmlstr):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   usertable = tables[0]
   if len(tables) == 1:
-    borrowtable = None
+    itemtable = None
   elif len(tables) == 2:
-    borrowtable = tables[1]
+    itemtable = tables[1]
   else:
     raise Exception('unexpected number of tables', tables)
-  return usertable, borrowtable
+  return usertable, itemtable
 
-def dumphtml(usertable, borrowtable):
+def dumphtml(usertable, itemtable):
   print(usertable.prettify())
-  if borrowtable is not None:
-    print(borrowtable.prettify())
+  if itemtable is not None:
+    print(itemtable.prettify())
 
 def getuserinfo(usertable):
   userinfo = {}
@@ -79,30 +79,30 @@ def getuserinfo(usertable):
   userinfo['validity'] = validity
   return userinfo
 
-def getborrowinfo(borrowtable):
-  borrowinfo = []
-  borrowtrs = borrowtable.find_all('tr')
-  for borrowtr in borrowtrs[2:]:
-    #print(borrowtr.prettify())
-    borrowtds = borrowtr.find_all('td')
-    duedate = borrowtds[3].string
-    fromlib = borrowtds[5].font['title']
-    title = borrowtds[7].string.replace('\r\n', ' ')
+def getiteminfo(itemtable):
+  iteminfo = []
+  itemtrs = itemtable.find_all('tr')
+  for itemtr in itemtrs[2:]:
+    #print(itemtr.prettify())
+    itemtds = itemtr.find_all('td')
+    duedate = itemtds[3].string
+    fromlib = itemtds[5].font['title']
+    title = itemtds[7].string.replace('\r\n', ' ')
     item = {
       'duedate': duedate,
       'fromlib': fromlib,
       'title': title
     }
-    borrowinfo.append(item)
-  return borrowinfo
+    iteminfo.append(item)
+  return iteminfo
 
-def getinfo(usertable, borrowtable):
+def getinfo(usertable, itemtable):
   userinfo = getuserinfo(usertable)
-  if borrowtable is not None:
-    borrowinfo = getborrowinfo(borrowtable)
+  if itemtable is not None:
+    iteminfo = getiteminfo(itemtable)
   else:
-    borrowinfo = []
-  info = {'user': userinfo, 'borrow': borrowinfo}
+    iteminfo = []
+  info = {'user': userinfo, 'item': iteminfo}
   return info
 
 def printjson(info):
@@ -122,10 +122,10 @@ def printinfo(info, today):
     print(f'ausweis läuft bald ab ({validity})')
     print(f'in tagen: {delta.days}')
 
-  if len(info['borrow']) == 0:
+  if len(info['item']) == 0:
     print('nichts ausgeliehen')
   else:
-    for item in info['borrow']:
+    for item in info['item']:
       duedate = item["duedate"]
       delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
       print(f'fällig: {duedate} (in tagen: {delta.days})')
@@ -136,11 +136,11 @@ def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   htmlstr = gethtmlstr(username, password, options.url)
-  usertable, borrowtable = gettables(htmlstr)
+  usertable, itemtable = gettables(htmlstr)
   if options.dumphtml:
-    dumphtml(usertable, borrowtable)
+    dumphtml(usertable, itemtable)
     return
-  info = getinfo(usertable, borrowtable)
+  info = getinfo(usertable, itemtable)
   if options.printjson:
     printjson(info)
     return
