@@ -108,8 +108,7 @@ def getinfo(usertable, itemtable):
 def printjson(info):
   print(json.dumps(info, indent=4))
 
-def printinfo(info, today):
-  userinfo = info['user']
+def printuserinfo(userinfo, today):
   print('name', userinfo['name'])
   if 'fee' in userinfo:
     print('gebühren', userinfo['fee'])
@@ -122,7 +121,7 @@ def printinfo(info, today):
     print(f'ausweis läuft bald ab ({expire})')
     print(f'in tagen: {delta.days}')
 
-  iteminfo = info['item']
+def printiteminfo(iteminfo, today):
   if len(iteminfo) == 0:
     print('nichts ausgeliehen')
   else:
@@ -132,6 +131,12 @@ def printinfo(info, today):
       print(f'fällig: {duedate} (in tagen: {delta.days})')
       print('bib:', item['fromlib'])
       print('titel:', item['title'])
+
+def printinfo(info, today):
+  userinfo = info['user']
+  printuserinfo(userinfo, today)
+  iteminfo = info['item']
+  printiteminfo(iteminfo, today)
 
 def main():
   options = getargv(sys.argv)
