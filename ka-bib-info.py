@@ -8,6 +8,7 @@ import time
 import datetime
 import types
 import argparse
+import json
 
 url = 'https://opac.karlsruhe.de/opax/user.C'
 
@@ -21,6 +22,8 @@ def getargv(argv):
         help='name of user to get info for')
   parser.add_argument('--dumphtml', action='store_true',
         help='just dump html instead extracting info')
+  parser.add_argument('--printjson', action='store_true',
+        help='print info in json instead human friendly plain text')
   args = parser.parse_args()
   args.url = url
   return args
@@ -102,6 +105,9 @@ def getinfo(usertable, borrowtable):
   info = {'user': userinfo, 'borrow': borrowinfo}
   return info
 
+def printjson(info):
+  print(json.dumps(info, indent=4))
+
 def printinfo(info, today):
   userinfo = info['user']
   print('name', userinfo['name'])
@@ -135,6 +141,9 @@ def main():
     dumphtml(usertable, borrowtable)
     return
   info = getinfo(usertable, borrowtable)
+  if options.printjson:
+    printjson(info)
+    return
   today = datetime.datetime.today()
   printinfo(info, today)
 
