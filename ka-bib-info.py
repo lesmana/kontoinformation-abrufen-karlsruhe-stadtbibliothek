@@ -102,9 +102,7 @@ def getinfo(usertable, borrowtable):
   info = {'user': userinfo, 'borrow': borrowinfo}
   return info
 
-def printinfo(usertable, borrowtable, today):
-  info = getinfo(usertable, borrowtable)
-
+def printinfo(info, today):
   userinfo = info['user']
   print('name', userinfo['name'])
   if 'fee' in userinfo:
@@ -136,8 +134,9 @@ def main():
   if options.dumphtml:
     dumphtml(usertable, borrowtable)
   else:
+    info = getinfo(usertable, borrowtable)
     today = datetime.datetime.today()
-    printinfo(usertable, borrowtable, today)
+    printinfo(info, today)
 
 if __name__ == '__main__':
   main()
