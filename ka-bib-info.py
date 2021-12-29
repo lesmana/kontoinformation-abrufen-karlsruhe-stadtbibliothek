@@ -74,8 +74,8 @@ def getuserinfo(usertable):
   fee = ''.join(infotds[2].stripped_strings)
   if fee != '':
     userinfo['fee'] = fee
-  expire = ''.join(infotds[5].stripped_strings)
-  _, expire = expire.split()
+  expirestr = ''.join(infotds[5].stripped_strings)
+  _, expire = expirestr.split()
   userinfo['expire'] = expire
   return userinfo
 
