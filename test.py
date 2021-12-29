@@ -42,5 +42,11 @@ class TestGetUserInfo(unittest.TestCase):
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
+  def test_emptyhtml(self):
+    htmlstr = ''
+    infotable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    with self.assertRaises(IndexError):
+      _ = t.getuserinfo(infotable)
+
 if __name__ == '__main__':
   unittest.main()
