@@ -63,7 +63,7 @@ def dumphtml(usertable, borrowtable):
   if borrowtable is not None:
     print(borrowtable.prettify())
 
-def getuserinfo(usertable, today):
+def getuserinfo(usertable):
   userinfo = {}
   infotds = usertable.find_all('td')
   name = ''.join(infotds[1].stripped_strings)
@@ -73,58 +73,58 @@ def getuserinfo(usertable, today):
     userinfo['fee'] = fee
   validity = ''.join(infotds[5].stripped_strings)
   _, validity = validity.split()
-  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - today
   userinfo['validity'] = validity
-  userinfo['days'] = delta.days
   return userinfo
 
-def getborrowinfo(borrowtable, today):
+def getborrowinfo(borrowtable):
   borrowinfo = []
   borrowtrs = borrowtable.find_all('tr')
   for borrowtr in borrowtrs[2:]:
     #print(borrowtr.prettify())
     borrowtds = borrowtr.find_all('td')
     duedate = borrowtds[3].string
-    delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
     fromlib = borrowtds[5].font['title']
     title = borrowtds[7].string.replace('\r\n', ' ')
     item = {
       'duedate': duedate,
-      'days': delta.days,
       'fromlib': fromlib,
       'title': title
     }
     borrowinfo.append(item)
   return borrowinfo
 
-def getinfo(usertable, borrowtable, today):
-  userinfo = getuserinfo(usertable, today)
+def getinfo(usertable, borrowtable):
+  userinfo = getuserinfo(usertable)
   if borrowtable is not None:
-    borrowinfo = getborrowinfo(borrowtable, today)
+    borrowinfo = getborrowinfo(borrowtable)
   else:
     borrowinfo = []
   info = {'user': userinfo, 'borrow': borrowinfo}
   return info
 
 def printinfo(usertable, borrowtable, today):
-  info = getinfo(usertable, borrowtable, today)
+  info = getinfo(usertable, borrowtable)
 
   userinfo = info['user']
   print('name', userinfo['name'])
   if 'fee' in userinfo:
     print('gebühren', userinfo['fee'])
-  if userinfo['days'] < 0:
-    print(f'ausweis abgelaufen ({userinfo["validity"]})')
-    print(f'in tagen: {userinfo["days"]}')
-  elif userinfo['days'] < 14:
-    print(f'ausweis läuft bald ab ({userinfo["validity"]})')
-    print(f'in tagen: {userinfo["days"]}')
+  validity = userinfo["validity"]
+  delta = datetime.datetime.strptime(validity, '%d.%m.%Y') - today
+  if delta.days < 0:
+    print(f'ausweis abgelaufen ({validity})')
+    print(f'in tagen: {delta.days}')
+  elif delta.days < 14:
+    print(f'ausweis läuft bald ab ({validity})')
+    print(f'in tagen: {delta.days}')
 
   if len(info['borrow']) == 0:
     print('nichts ausgeliehen')
   else:
     for item in info['borrow']:
-      print(f'fällig: {item["duedate"]} (in tagen: {item["days"]})')
+      duedate = item["duedate"]
+      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
+      print(f'fällig: {duedate} (in tagen: {delta.days})')
       print('bib:', item['fromlib'])
       print('titel:', item['title'])
 
