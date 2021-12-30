@@ -88,7 +88,7 @@ def getiteminfo(itemtable):
     itemtds = itemtr.find_all('td')
     duedate = itemtds[3].string
     fromlib = itemtds[5].font['title']
-    title = itemtds[7].string.replace('\r\n', ' ')
+    title = itemtds[7].get_text(strip=True).translate(str.maketrans('', '', '\r\n'))
     item = {
       'duedate': duedate,
       'fromlib': fromlib,
