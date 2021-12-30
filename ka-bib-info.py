@@ -84,7 +84,6 @@ def getiteminfo(itemtable):
   iteminfo = []
   itemtrs = itemtable.find_all('tr')
   for itemtr in itemtrs[2:]:
-    #print(itemtr.prettify())
     itemtds = itemtr.find_all('td')
     duedate = itemtds[3].get_text(strip=True)
     fromlib = itemtds[5].font['title']
