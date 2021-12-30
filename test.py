@@ -69,5 +69,24 @@ class TestGetItemInfo(unittest.TestCase):
     ]
     self.assertEqual(iteminfo, expectediteminfo)
 
+  def test_ueberfaellig(self):
+    with open('testfiles/ausleih-ueberfaellig.html') as openfile:
+      htmlstr = openfile.read()
+    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemtable)
+    expectediteminfo = [
+      {
+        'duedate': 'faelligkeitsdatum1',
+        'fromlib': 'bibnamelang1',
+        'title': 'medientyp1: titel1 abgeschnitt'
+      },
+      {
+        'duedate': 'faelligkeitsdatum2',
+        'fromlib': 'bibnamelang2',
+        'title': 'medientyp2: titel2 abgeschnitt'
+      }
+    ]
+    self.assertEqual(iteminfo, expectediteminfo)
+
 if __name__ == '__main__':
   unittest.main()
