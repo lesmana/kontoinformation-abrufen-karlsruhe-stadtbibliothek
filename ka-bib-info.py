@@ -94,7 +94,8 @@ def getiteminfo(itemtable):
     iteminfo.append(item)
   return iteminfo
 
-def getinfo(usertable, itemtable):
+def getinfo(soup):
+  usertable, itemtable = gettables(soup)
   userinfo = getuserinfo(usertable)
   if itemtable is not None:
     iteminfo = getiteminfo(itemtable)
@@ -143,8 +144,7 @@ def main():
   if options.dumphtml:
     dumphtml(soup)
     return
-  usertable, itemtable = gettables(soup)
-  info = getinfo(usertable, itemtable)
+  info = getinfo(soup)
   if options.printjson:
     printjson(info)
     return
