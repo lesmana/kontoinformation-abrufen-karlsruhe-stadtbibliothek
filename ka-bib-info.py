@@ -18,13 +18,17 @@ def getargv(argv):
       secretfilename = values if values.endswith('.secret') else values + '.secret'
       namespace.secretfilename = secretfilename
   parser = argparse.ArgumentParser()
-  parser.add_argument('username', action=HandleUsername,
+  parser.add_argument('username',
+        action=HandleUsername,
         help='name of user to get info for')
-  parser.add_argument('--dumphtml', action='store_true',
+  parser.add_argument('--dumphtml',
+        action='store_true',
         help='just dump html instead extracting info')
-  parser.add_argument('--printjson', action='store_true',
+  parser.add_argument('--printjson',
+        action='store_true',
         help='print info in json instead human friendly plain text')
-  parser.add_argument('--fromhtmlfile', dest='htmlfilename',
+  parser.add_argument('--fromhtmlfile',
+        dest='htmlfilename',
         help='get info from html file instead of website on live internets')
   args = parser.parse_args()
   args.url = url
