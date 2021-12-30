@@ -88,5 +88,12 @@ class TestGetItemInfo(unittest.TestCase):
     ]
     self.assertEqual(iteminfo, expectediteminfo)
 
+  def test_emptyhtml(self):
+    htmlstr = ''
+    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemtable)
+    expectediteminfo = []
+    self.assertEqual(iteminfo, expectediteminfo)
+
 if __name__ == '__main__':
   unittest.main()
