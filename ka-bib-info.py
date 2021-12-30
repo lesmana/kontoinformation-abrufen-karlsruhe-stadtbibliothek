@@ -69,13 +69,13 @@ def dumphtml(usertable, itemtable):
 def getuserinfo(usertable):
   userinfo = {}
   infotds = usertable.find_all('td')
-  name = ''.join(infotds[1].stripped_strings)
+  name = infotds[1].get_text(strip=True)
   userinfo['name'] = name
-  feestr = ''.join(infotds[2].stripped_strings)
+  feestr = infotds[2].get_text(strip=True)
   if feestr != '':
     fee, _ = feestr.split()
     userinfo['fee'] = fee
-  expirestr = ''.join(infotds[5].stripped_strings)
+  expirestr = infotds[5].get_text(strip=True)
   _, expire = expirestr.split()
   userinfo['expire'] = expire
   return userinfo
