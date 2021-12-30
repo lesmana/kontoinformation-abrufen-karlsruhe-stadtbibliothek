@@ -50,6 +50,9 @@ def getsoup(username, password, url):
   soup = bs4.BeautifulSoup(response.content, 'html.parser')
   return soup
 
+def dumphtml(soup):
+  print(soup.prettify())
+
 def gettables(soup):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   usertable = tables[0]
@@ -60,11 +63,6 @@ def gettables(soup):
   else:
     raise Exception('unexpected number of tables', tables)
   return usertable, itemtable
-
-def dumphtml(usertable, itemtable):
-  print(usertable.prettify())
-  if itemtable is not None:
-    print(itemtable.prettify())
 
 def getuserinfo(usertable):
   userinfo = {}
@@ -142,10 +140,10 @@ def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
   soup = getsoup(username, password, options.url)
-  usertable, itemtable = gettables(soup)
   if options.dumphtml:
-    dumphtml(usertable, itemtable)
+    dumphtml(soup)
     return
+  usertable, itemtable = gettables(soup)
   info = getinfo(usertable, itemtable)
   if options.printjson:
     printjson(info)
