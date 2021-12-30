@@ -94,7 +94,7 @@ def getiteminfo(itemtable):
     iteminfo.append(item)
   return iteminfo
 
-def getinfo(soup):
+def getinfoexcept(soup):
   usertable, itemtable = gettables(soup)
   userinfo = getuserinfo(usertable)
   if itemtable is not None:
@@ -103,6 +103,12 @@ def getinfo(soup):
     iteminfo = []
   info = {'user': userinfo, 'item': iteminfo}
   return info
+
+def getinfo(soup):
+  try:
+    return getinfoexcept(soup)
+  except Exception:
+    raise Exception('error getting info from soup', soup)
 
 def printjson(info):
   print(json.dumps(info, indent=4))
