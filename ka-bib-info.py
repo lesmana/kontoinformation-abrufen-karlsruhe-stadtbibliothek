@@ -36,7 +36,7 @@ def getlogindata(secretfilename):
     raise Exception('error trying to read credentials from file', secretfilename)
   return username, password
 
-def gethtmlstr(username, password, url):
+def getsoup(username, password, url):
   session = requests.Session()
   formdata = {
     'LANG': 'de',
@@ -47,10 +47,10 @@ def gethtmlstr(username, password, url):
   response = session.post(url, data=formdata)
   if response.status_code != 200:
     raise Exception('response status code not 200', response)
-  return response.content
+  soup = bs4.BeautifulSoup(response.content, 'html.parser')
+  return soup
 
-def gettables(htmlstr):
-  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+def gettables(soup):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   usertable = tables[0]
   if len(tables) == 1:
@@ -141,8 +141,8 @@ def printinfo(info, today):
 def main():
   options = getargv(sys.argv)
   username, password = getlogindata(options.secretfilename)
-  htmlstr = gethtmlstr(username, password, options.url)
-  usertable, itemtable = gettables(htmlstr)
+  soup = getsoup(username, password, options.url)
+  usertable, itemtable = gettables(soup)
   if options.dumphtml:
     dumphtml(usertable, itemtable)
     return
