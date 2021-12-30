@@ -24,6 +24,8 @@ def getargv(argv):
         help='just dump html instead extracting info')
   parser.add_argument('--printjson', action='store_true',
         help='print info in json instead human friendly plain text')
+  parser.add_argument('--fromhtmlfile', dest='htmlfilename',
+        help='get info from html file instead of website on live internets')
   args = parser.parse_args()
   args.url = url
   return args
@@ -35,6 +37,14 @@ def getlogindata(secretfilename):
   except:
     raise Exception('error trying to read credentials from file', secretfilename)
   return username, password
+
+def getsoupfromfile(filename):
+  try:
+    with open(filename) as openfile:
+      soup = bs4.BeautifulSoup(openfile.read(), 'html.parser')
+  except:
+    raise Exception('error trying to read html from file', filename)
+  return soup
 
 def getsoup(username, password, url):
   session = requests.Session()
@@ -145,8 +155,11 @@ def printinfo(info, today):
 
 def main():
   options = getargv(sys.argv)
-  username, password = getlogindata(options.secretfilename)
-  soup = getsoup(username, password, options.url)
+  if options.htmlfilename is not None:
+    soup = getsoupfromfile(options.htmlfilename)
+  else:
+    username, password = getlogindata(options.secretfilename)
+    soup = getsoup(username, password, options.url)
   if options.dumphtml:
     dumphtml(soup)
     return
