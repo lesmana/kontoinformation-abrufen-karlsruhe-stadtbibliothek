@@ -9,8 +9,8 @@ t = __import__('ka-bib-info')
 
 class TestGetUserInfo(unittest.TestCase):
 
-  def test_ok(self):
-    with open('testfiles/ausweis-ok.html') as openfile:
+  def test_normal(self):
+    with open('testfiles/ausweis-normal.html') as openfile:
       htmlstr = openfile.read()
     usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     userinfo = t.getuserinfo(usersoup)
@@ -40,8 +40,8 @@ class TestGetUserInfo(unittest.TestCase):
 
 class TestGetItemInfo(unittest.TestCase):
 
-  def test_ok(self):
-    with open('testfiles/ausleih-ok.html') as openfile:
+  def test_normal(self):
+    with open('testfiles/ausleih-normal.html') as openfile:
       htmlstr = openfile.read()
     itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
@@ -85,8 +85,8 @@ class TestGetItemInfo(unittest.TestCase):
 
 class TestGetInfo(unittest.TestCase):
 
-  def test_ok(self):
-    with open('testfiles/alles-ok.html') as openfile:
+  def test_normal(self):
+    with open('testfiles/alles-normal.html') as openfile:
       htmlstr = openfile.read()
     soup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     info = t.getinfo(soup, None)
@@ -113,7 +113,7 @@ class TestGetInfo(unittest.TestCase):
 
 class TestPrintUserInfo(unittest.TestCase):
 
-  def test_ok(self):
+  def test_normal(self):
     userinfo = {
       'name': 'voller name',
       'expire': '01.11.2021'
@@ -191,7 +191,7 @@ class TestPrintUserInfo(unittest.TestCase):
 
 class TestPrintItemInfo(unittest.TestCase):
 
-  def test_ok(self):
+  def test_normal(self):
     iteminfo = [
       {
         'duedate': '01.05.2021',
