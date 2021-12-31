@@ -136,37 +136,41 @@ def printjson(info):
 
 def printuserinfo(userinfo, today):
   name = userinfo['name']
-  print(f'name {name}')
+  yield f'name {name}'
   if 'fee' in userinfo:
     fee = userinfo['fee']
-    print(f'gebühren {fee} €')
+    yield f'gebühren {fee} €'
   expire = userinfo["expire"]
   delta = datetime.datetime.strptime(expire, '%d.%m.%Y') - today
   if delta.days < 0:
-    print(f'ausweis abgelaufen ({expire})')
-    print(f'in tagen: {delta.days}')
+    yield f'ausweis abgelaufen ({expire})'
+    yield f'in tagen: {delta.days}'
   elif delta.days < 14:
-    print(f'ausweis läuft bald ab ({expire})')
-    print(f'in tagen: {delta.days}')
+    yield f'ausweis läuft bald ab ({expire})'
+    yield f'in tagen: {delta.days}'
 
 def printiteminfo(iteminfo, today):
   if len(iteminfo) == 0:
-    print('nichts ausgeliehen')
+    yield 'nichts ausgeliehen'
   else:
     for item in iteminfo:
       duedate = item["duedate"]
       delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
-      print(f'fällig: {duedate} (in tagen: {delta.days})')
+      yield f'fällig: {duedate} (in tagen: {delta.days})'
       fromlib = item['fromlib']
-      print(f'bib: {fromlib}')
+      yield f'bib: {fromlib}'
       title = item['title']
-      print(f'titel: {title}')
+      yield f'titel: {title}'
+
+def printinfogen(info, today):
+  userinfo = info['user']
+  yield from printuserinfo(userinfo, today)
+  iteminfo = info['items']
+  yield from printiteminfo(iteminfo, today)
 
 def printinfo(info, today):
-  userinfo = info['user']
-  printuserinfo(userinfo, today)
-  iteminfo = info['items']
-  printiteminfo(iteminfo, today)
+  for line in printinfogen(info, today):
+    print(line)
 
 def main():
   options = getargv(sys.argv)
