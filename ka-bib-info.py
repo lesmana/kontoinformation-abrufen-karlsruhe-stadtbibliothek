@@ -179,9 +179,25 @@ def printinfogen(info, today):
   iteminfo = info['items']
   yield from printiteminfo(iteminfo, today)
 
-def printinfo(info, today):
+def printinfoexcept(info, today):
   for line in printinfogen(info, today):
     print(line)
+
+def printinfo(info, today, soup):
+  try:
+    printinfoexcept(info, today)
+  except Exception as e:
+    fd, htmlname = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
+    with open(fd, 'wt') as openfile:
+      openfile.write(soup.prettify())
+    fd, jsonname = tempfile.mkstemp(prefix='ka-bib-info-error-json-dump-', suffix='.json', dir='.', text=True)
+    with open(fd, 'wt') as openfile:
+      openfile.write(json.dumps(info, indent=4))
+    raise Exception(
+          f'error printing info from json. '
+          f'html written to file {name}. '
+          f'json written to file {name}.'
+          ) from e
 
 def main():
   options = getargv(sys.argv)
@@ -197,7 +213,7 @@ def main():
     printjson(info)
     return
   today = datetime.datetime.today()
-  printinfo(info, today)
+  printinfo(info, today, soup)
 
 if __name__ == '__main__':
   main()
