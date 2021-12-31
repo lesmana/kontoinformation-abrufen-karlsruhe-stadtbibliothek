@@ -9,7 +9,6 @@ import datetime
 import types
 import argparse
 import json
-import tempfile
 
 url = 'https://opac.karlsruhe.de/opax/user.C'
 
@@ -129,8 +128,9 @@ def getinfo(soup):
   try:
     return getinfoexcept(soup)
   except Exception as e:
-    fd, name = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
-    with open(fd, 'wt') as openfile:
+    now = datetime.datetime.today().isoformat(timespec='seconds')
+    name = f'ka-bib-info-error-dump-{now}.html'
+    with open(name, 'wt') as openfile:
       openfile.write(soup.prettify())
     raise Exception(
           f'error getting info from soup. '
@@ -187,16 +187,17 @@ def printinfo(info, today, soup):
   try:
     printinfoexcept(info, today)
   except Exception as e:
-    fd, htmlname = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
-    with open(fd, 'wt') as openfile:
+    now = datetime.datetime.today().isoformat(timespec='seconds')
+    htmlname = f'ka-bib-info-error-dump-{now}.html'
+    with open(htmlname, 'wt') as openfile:
       openfile.write(soup.prettify())
-    fd, jsonname = tempfile.mkstemp(prefix='ka-bib-info-error-json-dump-', suffix='.json', dir='.', text=True)
-    with open(fd, 'wt') as openfile:
+    jsonname = f'ka-bib-info-error-dump-{now}.json'
+    with open(jsonname, 'wt') as openfile:
       openfile.write(json.dumps(info, indent=4))
     raise Exception(
           f'error printing info from json. '
-          f'html written to file {name}. '
-          f'json written to file {name}.'
+          f'html written to file {htmlname}. '
+          f'json written to file {jsonname}.'
           ) from e
 
 def main():
