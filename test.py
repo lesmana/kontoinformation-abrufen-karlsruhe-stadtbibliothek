@@ -153,12 +153,15 @@ class TestPrintItemInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printiteminfo(iteminfo, today))
     expectedprinted = [
-      'fällig: 01.05.2021 (in tagen: 11)',
-      'bib: bibnamelang1',
+      '',
       'titel: medientyp1: titel1 abgeschnitt',
-      'fällig: 02.05.2021 (in tagen: 12)',
+      'fällig in 11 tagen (01.05.2021)',
+      'bib: bibnamelang1',
+      '',
+      'titel: medientyp2: titel2 abgeschnitt',
+      'fällig in 12 tagen (02.05.2021)',
       'bib: bibnamelang2',
-      'titel: medientyp2: titel2 abgeschnitt'
+      ''
    ]
     self.assertEqual(printed, expectedprinted)
 
@@ -178,12 +181,15 @@ class TestPrintItemInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printiteminfo(iteminfo, today))
     expectedprinted = [
-      'fällig: 01.04.2021 (in tagen: -19)',
-      'bib: bibnamelang1',
+      '',
       'titel: medientyp1: titel1 abgeschnitt',
-      'fällig: 02.04.2021 (in tagen: -18)',
+      'überfällig seit 19 tagen (01.04.2021)',
+      'bib: bibnamelang1',
+      '',
+      'titel: medientyp2: titel2 abgeschnitt',
+      'überfällig seit 18 tagen (02.04.2021)',
       'bib: bibnamelang2',
-      'titel: medientyp2: titel2 abgeschnitt'
+      ''
    ]
     self.assertEqual(printed, expectedprinted)
 
@@ -192,6 +198,7 @@ class TestPrintItemInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printiteminfo(iteminfo, today))
     expectedprinted = [
+      '',
       'nichts ausgeliehen'
    ]
     self.assertEqual(printed, expectedprinted)

@@ -149,17 +149,22 @@ def printuserinfo(userinfo, today):
     yield f'ausweis läuft in {delta.days} tagen ab ({expire})'
 
 def printiteminfo(iteminfo, today):
+  yield ''
   if len(iteminfo) == 0:
     yield 'nichts ausgeliehen'
   else:
     for item in iteminfo:
-      duedate = item["duedate"]
-      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
-      yield f'fällig: {duedate} (in tagen: {delta.days})'
-      fromlib = item['fromlib']
-      yield f'bib: {fromlib}'
       title = item['title']
       yield f'titel: {title}'
+      duedate = item["duedate"]
+      delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
+      if delta.days < 0:
+        yield f'überfällig seit {abs(delta.days)} tagen ({duedate})'
+      else:
+        yield f'fällig in {delta.days} tagen ({duedate})'
+      fromlib = item['fromlib']
+      yield f'bib: {fromlib}'
+      yield ''
 
 def printinfogen(info, today):
   userinfo = info['user']
