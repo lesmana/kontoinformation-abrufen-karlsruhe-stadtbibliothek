@@ -16,7 +16,7 @@ class TestGetUserInfo(unittest.TestCase):
     userinfo = t.getuserinfo(infotable)
     expecteduserinfo = {
       'name': 'voller name',
-      'expire': 'datum-noch-gültig'
+      'expire': '01.11.2021'
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
@@ -27,7 +27,7 @@ class TestGetUserInfo(unittest.TestCase):
     userinfo = t.getuserinfo(infotable)
     expecteduserinfo = {
       'name': 'voller name',
-      'expire': 'datum-abgelaufen'
+      'expire': '15.04.2021'
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
@@ -39,7 +39,7 @@ class TestGetUserInfo(unittest.TestCase):
     expecteduserinfo = {
       'name': 'voller name',
       'fee': '3,50',
-      'expire': 'datum-noch-gültig'
+      'expire': '01.11.2021'
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
@@ -58,12 +58,12 @@ class TestGetItemInfo(unittest.TestCase):
     iteminfo = t.getiteminfo(itemtable)
     expectediteminfo = [
       {
-        'duedate': 'faelligkeitsdatum1',
+        'duedate': '01.05.2021',
         'fromlib': 'bibnamelang1',
         'title': 'medientyp1: titel1 abgeschnitt'
       },
       {
-        'duedate': 'faelligkeitsdatum2',
+        'duedate': '02.05.2021',
         'fromlib': 'bibnamelang2',
         'title': 'medientyp2: titel2 abgeschnitt'
       }
@@ -77,12 +77,12 @@ class TestGetItemInfo(unittest.TestCase):
     iteminfo = t.getiteminfo(itemtable)
     expectediteminfo = [
       {
-        'duedate': 'faelligkeitsdatum1',
+        'duedate': '01.04.2021',
         'fromlib': 'bibnamelang1',
         'title': 'medientyp1: titel1 abgeschnitt'
       },
       {
-        'duedate': 'faelligkeitsdatum2',
+        'duedate': '02.04.2021',
         'fromlib': 'bibnamelang2',
         'title': 'medientyp2: titel2 abgeschnitt'
       }
