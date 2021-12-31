@@ -46,8 +46,8 @@ def getsoupfromfile(htmlfilename):
 
 def getlogindata(secretfilename):
   try:
-    with open(secretfilename) as secretfile:
-      username, password = secretfile.read().splitlines()
+    with open(secretfilename) as openfile:
+      username, password = openfile.read().splitlines()
   except:
     raise Exception('error trying to read credentials from file', secretfilename)
   return username, password
