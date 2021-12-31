@@ -190,5 +190,14 @@ class TestPrintItemInfo(unittest.TestCase):
    ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_empty(self):
+    iteminfo = []
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printiteminfo(iteminfo, today))
+    expectedprinted = [
+      'nichts ausgeliehen'
+   ]
+    self.assertEqual(printed, expectedprinted)
+
 if __name__ == '__main__':
   unittest.main()
