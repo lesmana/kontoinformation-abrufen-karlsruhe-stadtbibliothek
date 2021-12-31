@@ -209,5 +209,11 @@ class TestPrintItemInfo(unittest.TestCase):
     ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_empty2(self):
+    iteminfo = [{}]
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    with self.assertRaises(KeyError):
+      _ = list(t.printiteminfo(iteminfo, today))
+
 if __name__ == '__main__':
   unittest.main()
