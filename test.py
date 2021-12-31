@@ -138,5 +138,19 @@ class TestPrintUserInfo(unittest.TestCase):
     ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_gebuehren(self):
+    userinfo = {
+      'name': 'voller name',
+      'fee': '3,50',
+      'expire': '01.11.2021'
+    }
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printuserinfo(userinfo, today))
+    expectedprinted = [
+      'name voller name',
+      'gebühren 3,50 €'
+    ]
+    self.assertEqual(printed, expectedprinted)
+
 if __name__ == '__main__':
   unittest.main()
