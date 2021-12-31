@@ -135,9 +135,11 @@ def printjson(info):
   print(json.dumps(info, indent=4))
 
 def printuserinfo(userinfo, today):
-  print('name', userinfo['name'])
+  name = userinfo['name']
+  print('name', name)
   if 'fee' in userinfo:
-    print('gebühren', userinfo['fee'], '€')
+    fee = userinfo['fee']
+    print('gebühren', fee, '€')
   expire = userinfo["expire"]
   delta = datetime.datetime.strptime(expire, '%d.%m.%Y') - today
   if delta.days < 0:
@@ -155,8 +157,10 @@ def printiteminfo(iteminfo, today):
       duedate = item["duedate"]
       delta = datetime.datetime.strptime(duedate, '%d.%m.%Y') - today
       print(f'fällig: {duedate} (in tagen: {delta.days})')
-      print('bib:', item['fromlib'])
-      print('titel:', item['title'])
+      fromlib = item['fromlib']
+      print('bib:', fromlib)
+      title = item['title']
+      print('titel:', title)
 
 def printinfo(info, today):
   userinfo = info['user']
