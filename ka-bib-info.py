@@ -30,7 +30,8 @@ def getargv(argv):
         help='print info in json instead human friendly plain text')
   parser.add_argument('--fromhtmlfile',
         dest='htmlfilename',
-        help='get info from html file instead of website on live internets')
+        help='get info from html file instead of website on live internets'
+          ' (this is mainly for testing)')
   args = parser.parse_args()
   args.url = url
   return args
