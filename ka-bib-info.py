@@ -34,14 +34,6 @@ def getargv(argv):
   args.url = url
   return args
 
-def getlogindata(secretfilename):
-  try:
-    with open(secretfilename) as secretfile:
-      username, password = secretfile.read().splitlines()
-  except:
-    raise Exception('error trying to read credentials from file', secretfilename)
-  return username, password
-
 def getsoupfromfile(filename):
   try:
     with open(filename) as openfile:
@@ -49,6 +41,14 @@ def getsoupfromfile(filename):
   except:
     raise Exception('error trying to read html from file', filename)
   return soup
+
+def getlogindata(secretfilename):
+  try:
+    with open(secretfilename) as secretfile:
+      username, password = secretfile.read().splitlines()
+  except:
+    raise Exception('error trying to read credentials from file', secretfilename)
+  return username, password
 
 def getsoupfrominternets(filename, url):
   username, password = getlogindata(filename)
