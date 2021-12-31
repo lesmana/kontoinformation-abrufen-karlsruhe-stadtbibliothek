@@ -9,6 +9,7 @@ import datetime
 import types
 import argparse
 import json
+import tempfile
 
 url = 'https://opac.karlsruhe.de/opax/user.C'
 
@@ -123,7 +124,12 @@ def getinfo(soup):
   try:
     return getinfoexcept(soup)
   except Exception:
-    raise Exception('error getting info from soup', soup)
+    fd, name = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
+    with open(fd, 'wt') as openfile:
+      openfile.write(soup.prettify())
+    print('error getting info from soup', file=sys.stderr)
+    print('html written to file', name, file=sys.stderr)
+    raise
 
 def printjson(info):
   print(json.dumps(info, indent=4))
