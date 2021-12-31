@@ -20,17 +20,6 @@ class TestGetUserInfo(unittest.TestCase):
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
-  def test_abgelaufen(self):
-    with open('testfiles/ausweis-abgelaufen.html') as openfile:
-      htmlstr = openfile.read()
-    infotable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    userinfo = t.getuserinfo(infotable)
-    expecteduserinfo = {
-      'name': 'voller name',
-      'expire': '15.04.2021'
-    }
-    self.assertEqual(userinfo, expecteduserinfo)
-
   def test_gebuehren(self):
     with open('testfiles/ausweis-gebuehren.html') as openfile:
       htmlstr = openfile.read()
