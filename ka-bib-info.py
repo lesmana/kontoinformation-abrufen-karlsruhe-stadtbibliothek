@@ -50,7 +50,8 @@ def getsoupfromfile(filename):
     raise Exception('error trying to read html from file', filename)
   return soup
 
-def getsoupfrominternets(username, password, url):
+def getsoupfrominternets(filename, url):
+  username, password = getlogindata(filename)
   session = requests.Session()
   formdata = {
     'LANG': 'de',
@@ -162,8 +163,7 @@ def main():
   if options.htmlfilename is not None:
     soup = getsoupfromfile(options.htmlfilename)
   else:
-    username, password = getlogindata(options.secretfilename)
-    soup = getsoupfrominternets(username, password, options.url)
+    soup = getsoupfrominternets(options.secretfilename, options.url)
   if options.dumphtml:
     dumphtml(soup)
     return
