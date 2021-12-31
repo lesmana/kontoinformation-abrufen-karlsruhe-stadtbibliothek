@@ -127,9 +127,9 @@ def getinfo(soup):
     fd, name = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
     with open(fd, 'wt') as openfile:
       openfile.write(soup.prettify())
-    print('error getting info from soup', file=sys.stderr)
-    print('html written to file', name, file=sys.stderr)
-    raise
+    raise Exception(
+          f'error getting info from soup. '
+          f'html written to file {name}')
 
 def printjson(info):
   print(json.dumps(info, indent=4))
