@@ -34,12 +34,12 @@ def getargv(argv):
   args.url = url
   return args
 
-def getsoupfromfile(filename):
+def getsoupfromfile(htmlfilename):
   try:
-    with open(filename) as openfile:
+    with open(htmlfilename) as openfile:
       soup = bs4.BeautifulSoup(openfile.read(), 'html.parser')
   except:
-    raise Exception('error trying to read html from file', filename)
+    raise Exception('error trying to read html from file', htmlfilename)
   return soup
 
 def getlogindata(secretfilename):
@@ -50,8 +50,8 @@ def getlogindata(secretfilename):
     raise Exception('error trying to read credentials from file', secretfilename)
   return username, password
 
-def getsoupfrominternets(filename, url):
-  username, password = getlogindata(filename)
+def getsoupfrominternets(secretfilename, url):
+  username, password = getlogindata(secretfilename)
   session = requests.Session()
   formdata = {
     'LANG': 'de',
