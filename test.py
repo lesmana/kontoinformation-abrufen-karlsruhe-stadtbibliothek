@@ -200,7 +200,7 @@ class TestPrintItemInfo(unittest.TestCase):
     expectedprinted = [
       '',
       'nichts ausgeliehen'
-   ]
+    ]
     self.assertEqual(printed, expectedprinted)
 
 if __name__ == '__main__':
