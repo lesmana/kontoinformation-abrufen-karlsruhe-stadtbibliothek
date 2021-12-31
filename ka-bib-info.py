@@ -95,19 +95,23 @@ def getuserinfo(usertable):
   userinfo['expire'] = expire
   return userinfo
 
+def getoneiteminfo(itemtr):
+  itemtds = itemtr.find_all('td')
+  duedate = itemtds[3].get_text(strip=True)
+  fromlib = itemtds[5].font['title']
+  title = itemtds[7].get_text(strip=True).translate(str.maketrans('', '', '\r\n'))
+  item = {
+    'duedate': duedate,
+    'fromlib': fromlib,
+    'title': title
+  }
+  return item
+
 def getiteminfo(itemtable):
   iteminfo = []
   itemtrs = itemtable.find_all('tr')
   for itemtr in itemtrs[2:]:
-    itemtds = itemtr.find_all('td')
-    duedate = itemtds[3].get_text(strip=True)
-    fromlib = itemtds[5].font['title']
-    title = itemtds[7].get_text(strip=True).translate(str.maketrans('', '', '\r\n'))
-    item = {
-      'duedate': duedate,
-      'fromlib': fromlib,
-      'title': title
-    }
+    item = getoneiteminfo(itemtr)
     iteminfo.append(item)
   return iteminfo
 
