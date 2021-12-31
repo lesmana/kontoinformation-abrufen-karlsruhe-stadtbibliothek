@@ -68,18 +68,18 @@ def getsoupfrominternets(secretfilename, url):
 
 def gettables(soup):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
-  usertable = tables[0]
+  usersoup = tables[0]
   if len(tables) == 1:
-    itemtable = None
+    itemsoup = None
   elif len(tables) == 2:
-    itemtable = tables[1]
+    itemsoup = tables[1]
   else:
     raise Exception('unexpected number of tables', tables)
-  return usertable, itemtable
+  return usersoup, itemsoup
 
-def getuserinfo(usertable):
+def getuserinfo(usersoup):
   userinfo = {}
-  infotds = usertable.find_all('td')
+  infotds = usersoup.find_all('td')
   name = infotds[1].get_text(strip=True)
   userinfo['name'] = name
   feestr = infotds[2].get_text(strip=True)
@@ -103,19 +103,19 @@ def getoneiteminfo(itemtr):
   }
   return item
 
-def getiteminfo(itemtable):
+def getiteminfo(itemsoup):
   iteminfo = []
-  itemtrs = itemtable.find_all('tr')
+  itemtrs = itemsoup.find_all('tr')
   for itemtr in itemtrs[2:]:
     item = getoneiteminfo(itemtr)
     iteminfo.append(item)
   return iteminfo
 
 def getinfoexcept(soup):
-  usertable, itemtable = gettables(soup)
-  userinfo = getuserinfo(usertable)
-  if itemtable is not None:
-    iteminfo = getiteminfo(itemtable)
+  usersoup, itemsoup = gettables(soup)
+  userinfo = getuserinfo(usersoup)
+  if itemsoup is not None:
+    iteminfo = getiteminfo(itemsoup)
   else:
     iteminfo = []
   info = {'user': userinfo, 'items': iteminfo}

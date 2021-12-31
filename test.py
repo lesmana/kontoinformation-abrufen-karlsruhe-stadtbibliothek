@@ -12,8 +12,8 @@ class TestGetUserInfo(unittest.TestCase):
   def test_ok(self):
     with open('testfiles/ausweis-ok.html') as openfile:
       htmlstr = openfile.read()
-    infotable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    userinfo = t.getuserinfo(infotable)
+    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    userinfo = t.getuserinfo(usersoup)
     expecteduserinfo = {
       'name': 'voller name',
       'expire': '01.11.2021'
@@ -23,8 +23,8 @@ class TestGetUserInfo(unittest.TestCase):
   def test_gebuehren(self):
     with open('testfiles/ausweis-gebuehren.html') as openfile:
       htmlstr = openfile.read()
-    infotable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    userinfo = t.getuserinfo(infotable)
+    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    userinfo = t.getuserinfo(usersoup)
     expecteduserinfo = {
       'name': 'voller name',
       'fee': '3,50',
@@ -34,17 +34,17 @@ class TestGetUserInfo(unittest.TestCase):
 
   def test_emptyhtml(self):
     htmlstr = ''
-    infotable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     with self.assertRaises(IndexError):
-      _ = t.getuserinfo(infotable)
+      _ = t.getuserinfo(usersoup)
 
 class TestGetItemInfo(unittest.TestCase):
 
   def test_ok(self):
     with open('testfiles/ausleih-ok.html') as openfile:
       htmlstr = openfile.read()
-    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    iteminfo = t.getiteminfo(itemtable)
+    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = [
       {
         'duedate': '01.05.2021',
@@ -68,8 +68,8 @@ class TestGetItemInfo(unittest.TestCase):
     # returns empty list instead
     with open('testfiles/ausleih-missingitems.html') as openfile:
       htmlstr = openfile.read()
-    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    iteminfo = t.getiteminfo(itemtable)
+    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
 
@@ -78,8 +78,8 @@ class TestGetItemInfo(unittest.TestCase):
     # because why should html be empty
     # but test error handling nonetheless
     htmlstr = ''
-    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
-    iteminfo = t.getiteminfo(itemtable)
+    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
 
