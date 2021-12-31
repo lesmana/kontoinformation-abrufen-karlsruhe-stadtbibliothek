@@ -224,6 +224,9 @@ class TestPrintItemInfo(unittest.TestCase):
     self.assertEqual(printed, expectedprinted)
 
   def test_empty2(self):
+    # this is not realistic error
+    # because preceding code wouldn't return empty dict
+    # this just tests error handling of code
     iteminfo = [{}]
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     with self.assertRaises(KeyError):
