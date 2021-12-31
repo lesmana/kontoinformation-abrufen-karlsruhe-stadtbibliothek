@@ -76,7 +76,7 @@ class TestPrintUserInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printuserinfo(userinfo, today))
     expectedprinted = [
-      'name voller name'
+      'name: voller name'
     ]
     self.assertEqual(printed, expectedprinted)
 
@@ -88,9 +88,8 @@ class TestPrintUserInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printuserinfo(userinfo, today))
     expectedprinted = [
-      'name voller name',
-      'ausweis läuft bald ab (25.04.2021)',
-      'in tagen: 5'
+      'name: voller name',
+      'ausweis läuft in 5 tagen ab (25.04.2021)'
     ]
     self.assertEqual(printed, expectedprinted)
 
@@ -102,9 +101,8 @@ class TestPrintUserInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printuserinfo(userinfo, today))
     expectedprinted = [
-      'name voller name',
-      'ausweis abgelaufen (15.04.2021)',
-      'in tagen: -5'
+      'name: voller name',
+      'ausweis ist seit 5 tagen abgelaufen (15.04.2021)'
     ]
     self.assertEqual(printed, expectedprinted)
 
@@ -117,8 +115,8 @@ class TestPrintUserInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printuserinfo(userinfo, today))
     expectedprinted = [
-      'name voller name',
-      'gebühren 3,50 €'
+      'name: voller name',
+      'gebühren: 3,50 €'
     ]
     self.assertEqual(printed, expectedprinted)
 
@@ -131,10 +129,9 @@ class TestPrintUserInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     printed = list(t.printuserinfo(userinfo, today))
     expectedprinted = [
-      'name voller name',
-      'gebühren 3,50 €',
-      'ausweis abgelaufen (15.04.2021)',
-      'in tagen: -5'
+      'name: voller name',
+      'gebühren: 3,50 €',
+      'ausweis ist seit 5 tagen abgelaufen (15.04.2021)'
     ]
     self.assertEqual(printed, expectedprinted)
 

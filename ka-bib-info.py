@@ -137,18 +137,16 @@ def printjson(info):
 
 def printuserinfo(userinfo, today):
   name = userinfo['name']
-  yield f'name {name}'
+  yield f'name: {name}'
   if 'fee' in userinfo:
     fee = userinfo['fee']
-    yield f'gebühren {fee} €'
+    yield f'gebühren: {fee} €'
   expire = userinfo["expire"]
   delta = datetime.datetime.strptime(expire, '%d.%m.%Y') - today
   if delta.days < 0:
-    yield f'ausweis abgelaufen ({expire})'
-    yield f'in tagen: {delta.days}'
+    yield f'ausweis ist seit {abs(delta.days)} tagen abgelaufen ({expire})'
   elif delta.days < 14:
-    yield f'ausweis läuft bald ab ({expire})'
-    yield f'in tagen: {delta.days}'
+    yield f'ausweis läuft in {delta.days} tagen ab ({expire})'
 
 def printiteminfo(iteminfo, today):
   if len(iteminfo) == 0:
