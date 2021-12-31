@@ -117,7 +117,7 @@ def getinfoexcept(soup):
     iteminfo = getiteminfo(itemtable)
   else:
     iteminfo = []
-  info = {'user': userinfo, 'item': iteminfo}
+  info = {'user': userinfo, 'items': iteminfo}
   return info
 
 def getinfo(soup):
@@ -161,7 +161,7 @@ def printiteminfo(iteminfo, today):
 def printinfo(info, today):
   userinfo = info['user']
   printuserinfo(userinfo, today)
-  iteminfo = info['item']
+  iteminfo = info['items']
   printiteminfo(iteminfo, today)
 
 def main():
