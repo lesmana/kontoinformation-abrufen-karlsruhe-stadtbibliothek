@@ -66,9 +66,6 @@ def getsoupfrominternets(secretfilename, url):
   soup = bs4.BeautifulSoup(response.content, 'html.parser')
   return soup
 
-def dumphtml(soup):
-  print(soup.prettify())
-
 def gettables(soup):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
   usertable = tables[0]
@@ -140,9 +137,6 @@ def getinfo(soup, today):
           f'error getting info from soup. '
           f'html written to file {name}') from e
 
-def printjson(info):
-  print(json.dumps(info, indent=4))
-
 def printuserinfo(userinfo, today):
   name = userinfo['name']
   yield f'name: {name}'
@@ -211,12 +205,12 @@ def main():
   else:
     soup = getsoupfrominternets(options.secretfilename, options.url)
   if options.dumphtml:
-    dumphtml(soup)
+    print(soup.prettify())
     return
   today = datetime.datetime.today()
   info = getinfo(soup, today)
   if options.printjson:
-    printjson(info)
+    print(json.dumps(info, indent=4))
     return
   printinfo(info, today, soup)
 
