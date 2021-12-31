@@ -123,13 +123,13 @@ def getinfoexcept(soup):
 def getinfo(soup):
   try:
     return getinfoexcept(soup)
-  except Exception:
+  except Exception as e:
     fd, name = tempfile.mkstemp(prefix='ka-bib-info-error-html-dump-', suffix='.html', dir='.', text=True)
     with open(fd, 'wt') as openfile:
       openfile.write(soup.prettify())
     raise Exception(
           f'error getting info from soup. '
-          f'html written to file {name}')
+          f'html written to file {name}') from e
 
 def printjson(info):
   print(json.dumps(info, indent=4))
