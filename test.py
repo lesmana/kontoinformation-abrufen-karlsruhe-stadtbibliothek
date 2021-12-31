@@ -59,6 +59,20 @@ class TestGetItemInfo(unittest.TestCase):
     ]
     self.assertEqual(iteminfo, expectediteminfo)
 
+  def test_missingitems(self):
+    # this not realistic error
+    # because either items are present
+    # or the entire table is not present
+    # still it tests robustness of code
+    # in this case code throws no error
+    # returns empty list instead
+    with open('testfiles/ausleih-missingitems.html') as openfile:
+      htmlstr = openfile.read()
+    itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    iteminfo = t.getiteminfo(itemtable)
+    expectediteminfo = []
+    self.assertEqual(iteminfo, expectediteminfo)
+
   def test_emptyhtml(self):
     htmlstr = ''
     itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
