@@ -83,6 +83,34 @@ class TestGetItemInfo(unittest.TestCase):
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
 
+class TestGetInfo(unittest.TestCase):
+
+  def test_ok(self):
+    with open('testfiles/alles-ok.html') as openfile:
+      htmlstr = openfile.read()
+    soup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    info = t.getinfo(soup, None)
+    expectedinfo = {
+      'user': {
+        'name': 'voller name',
+        'expire': '01.11.2021'
+      },
+      'items': [
+        {
+          'duedate': '01.05.2021',
+          'fromlib': 'bibnamelang1',
+          'title': 'medientyp1: titel1 abgeschnitt'
+        },
+        {
+          'duedate': '02.05.2021',
+          'fromlib': 'bibnamelang2',
+          'title': 'medientyp2: titel2 abgeschnitt'
+        }
+      ]
+    }
+    self.maxDiff = None
+    self.assertEqual(info, expectedinfo)
+
 class TestPrintUserInfo(unittest.TestCase):
 
   def test_ok(self):
