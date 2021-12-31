@@ -74,6 +74,9 @@ class TestGetItemInfo(unittest.TestCase):
     self.assertEqual(iteminfo, expectediteminfo)
 
   def test_emptyhtml(self):
+    # this is also not realistic error
+    # because why should html be empty
+    # but test error handling nonetheless
     htmlstr = ''
     itemtable =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemtable)
