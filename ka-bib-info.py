@@ -124,11 +124,11 @@ def getinfoexcept(soup):
   info = {'user': userinfo, 'items': iteminfo}
   return info
 
-def getinfo(soup):
+def getinfo(soup, today):
   try:
     return getinfoexcept(soup)
   except Exception as e:
-    now = datetime.datetime.today().isoformat(timespec='seconds')
+    now = today.isoformat(timespec='seconds')
     name = f'ka-bib-info-error-dump-{now}.html'
     with open(name, 'wt') as openfile:
       openfile.write(soup.prettify())
@@ -187,7 +187,7 @@ def printinfo(info, today, soup):
   try:
     printinfoexcept(info, today)
   except Exception as e:
-    now = datetime.datetime.today().isoformat(timespec='seconds')
+    now = today.isoformat(timespec='seconds')
     htmlname = f'ka-bib-info-error-dump-{now}.html'
     with open(htmlname, 'wt') as openfile:
       openfile.write(soup.prettify())
@@ -209,11 +209,11 @@ def main():
   if options.dumphtml:
     dumphtml(soup)
     return
-  info = getinfo(soup)
+  today = datetime.datetime.today()
+  info = getinfo(soup, today)
   if options.printjson:
     printjson(info)
     return
-  today = datetime.datetime.today()
   printinfo(info, today, soup)
 
 if __name__ == '__main__':
