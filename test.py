@@ -32,6 +32,18 @@ class TestGetUserInfo(unittest.TestCase):
     }
     self.assertEqual(userinfo, expecteduserinfo)
 
+  def test_ausleihe(self):
+    # parsing ausleihe not implemented yet
+    with open('testfiles/ausweis-ausleihe.html') as openfile:
+      htmlstr = openfile.read()
+    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    userinfo = t.getuserinfo(usersoup)
+    expecteduserinfo = {
+      'name': 'voller name',
+      'expire': '01.11.2021'
+    }
+    self.assertEqual(userinfo, expecteduserinfo)
+
   def test_emptyhtml(self):
     htmlstr = ''
     usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
