@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import unittest
+import datetime
 
 import bs4
 
@@ -94,6 +95,20 @@ class TestGetItemInfo(unittest.TestCase):
     iteminfo = t.getiteminfo(itemtable)
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
+
+class TestPrintUserInfo(unittest.TestCase):
+
+  def test_ok(self):
+    userinfo = {
+      'name': 'voller name',
+      'expire': '01.11.2021'
+    }
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printuserinfo(userinfo, today))
+    expectedprinted = [
+      'name voller name'
+    ]
+    self.assertEqual(printed, expectedprinted)
 
 if __name__ == '__main__':
   unittest.main()
