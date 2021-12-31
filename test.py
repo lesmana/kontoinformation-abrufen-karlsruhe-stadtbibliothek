@@ -165,5 +165,30 @@ class TestPrintItemInfo(unittest.TestCase):
    ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_ueberfaellig(self):
+    iteminfo = [
+      {
+        'duedate': '01.04.2021',
+        'fromlib': 'bibnamelang1',
+        'title': 'medientyp1: titel1 abgeschnitt'
+      },
+      {
+        'duedate': '02.04.2021',
+        'fromlib': 'bibnamelang2',
+        'title': 'medientyp2: titel2 abgeschnitt'
+      }
+    ]
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printiteminfo(iteminfo, today))
+    expectedprinted = [
+      'fällig: 01.04.2021 (in tagen: -19)',
+      'bib: bibnamelang1',
+      'titel: medientyp1: titel1 abgeschnitt',
+      'fällig: 02.04.2021 (in tagen: -18)',
+      'bib: bibnamelang2',
+      'titel: medientyp2: titel2 abgeschnitt'
+   ]
+    self.assertEqual(printed, expectedprinted)
+
 if __name__ == '__main__':
   unittest.main()
