@@ -135,6 +135,12 @@ class TestPrintUserInfo(unittest.TestCase):
     ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_empty(self):
+    userinfo = {}
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    with self.assertRaises(KeyError):
+      _ = list(t.printuserinfo(userinfo, today))
+
 class TestPrintItemInfo(unittest.TestCase):
 
   def test_ok(self):
