@@ -88,11 +88,11 @@ class TestPrintUserInfo(unittest.TestCase):
       'expire': '01.11.2021'
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printuserinfo(userinfo, today))
-    expectedprinted = [
+    lines = list(t.printuserinfo(userinfo, today))
+    expectedlines = [
       'name: voller name'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_läuftbaldab(self):
     userinfo = {
@@ -100,12 +100,12 @@ class TestPrintUserInfo(unittest.TestCase):
       'expire': '25.04.2021'
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printuserinfo(userinfo, today))
-    expectedprinted = [
+    lines = list(t.printuserinfo(userinfo, today))
+    expectedlines = [
       'name: voller name',
       'ausweis läuft in 5 tagen ab (25.04.2021)'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_abgelaufen(self):
     userinfo = {
@@ -113,12 +113,12 @@ class TestPrintUserInfo(unittest.TestCase):
       'expire': '15.04.2021'
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printuserinfo(userinfo, today))
-    expectedprinted = [
+    lines = list(t.printuserinfo(userinfo, today))
+    expectedlines = [
       'name: voller name',
       'ausweis ist seit 5 tagen abgelaufen (15.04.2021)'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_gebuehren(self):
     userinfo = {
@@ -127,12 +127,12 @@ class TestPrintUserInfo(unittest.TestCase):
       'expire': '01.11.2021'
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printuserinfo(userinfo, today))
-    expectedprinted = [
+    lines = list(t.printuserinfo(userinfo, today))
+    expectedlines = [
       'name: voller name',
       'gebühren: 3,50 €'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_gebuehren_abgelaufen(self):
     userinfo = {
@@ -141,13 +141,13 @@ class TestPrintUserInfo(unittest.TestCase):
       'expire': '15.04.2021'
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printuserinfo(userinfo, today))
-    expectedprinted = [
+    lines = list(t.printuserinfo(userinfo, today))
+    expectedlines = [
       'name: voller name',
       'gebühren: 3,50 €',
       'ausweis ist seit 5 tagen abgelaufen (15.04.2021)'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_empty(self):
     userinfo = {}
@@ -171,8 +171,8 @@ class TestPrintItemInfo(unittest.TestCase):
       }
     ]
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printiteminfo(iteminfo, today))
-    expectedprinted = [
+    lines = list(t.printiteminfo(iteminfo, today))
+    expectedlines = [
       '',
       'titel: medientyp1: titel1 abgeschnitt',
       'fällig in 11 tagen (01.05.2021)',
@@ -183,7 +183,7 @@ class TestPrintItemInfo(unittest.TestCase):
       'bib: bibnamelang2',
       ''
    ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_ueberfaellig(self):
     iteminfo = [
@@ -199,8 +199,8 @@ class TestPrintItemInfo(unittest.TestCase):
       }
     ]
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printiteminfo(iteminfo, today))
-    expectedprinted = [
+    lines = list(t.printiteminfo(iteminfo, today))
+    expectedlines = [
       '',
       'titel: medientyp1: titel1 abgeschnitt',
       'überfällig seit 19 tagen (01.04.2021)',
@@ -211,17 +211,17 @@ class TestPrintItemInfo(unittest.TestCase):
       'bib: bibnamelang2',
       ''
    ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_empty(self):
     iteminfo = []
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    printed = list(t.printiteminfo(iteminfo, today))
-    expectedprinted = [
+    lines = list(t.printiteminfo(iteminfo, today))
+    expectedlines = [
       '',
       'nichts ausgeliehen'
     ]
-    self.assertEqual(printed, expectedprinted)
+    self.assertEqual(lines, expectedlines)
 
   def test_empty2(self):
     # this is not realistic error
