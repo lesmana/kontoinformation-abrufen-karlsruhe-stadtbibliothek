@@ -110,5 +110,33 @@ class TestPrintUserInfo(unittest.TestCase):
     ]
     self.assertEqual(printed, expectedprinted)
 
+  def test_läuftbaldab(self):
+    userinfo = {
+      'name': 'voller name',
+      'expire': '25.04.2021'
+    }
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printuserinfo(userinfo, today))
+    expectedprinted = [
+      'name voller name',
+      'ausweis läuft bald ab (25.04.2021)',
+      'in tagen: 5'
+    ]
+    self.assertEqual(printed, expectedprinted)
+
+  def test_abgelaufen(self):
+    userinfo = {
+      'name': 'voller name',
+      'expire': '15.04.2021'
+    }
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    printed = list(t.printuserinfo(userinfo, today))
+    expectedprinted = [
+      'name voller name',
+      'ausweis abgelaufen (15.04.2021)',
+      'in tagen: -5'
+    ]
+    self.assertEqual(printed, expectedprinted)
+
 if __name__ == '__main__':
   unittest.main()
