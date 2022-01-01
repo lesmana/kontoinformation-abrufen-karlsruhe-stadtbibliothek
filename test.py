@@ -332,5 +332,26 @@ class TestPrintInfo(unittest.TestCase):
     self.maxDiff = None
     self.assertEqual(lines, expectedlines)
 
+  def test_error(self):
+    htmlstr = '<html></html>'
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+    info = {} # this is the error
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    mock_open = mock.mock_open()
+    with mock.patch('__main__.t.open', mock_open):
+      with self.assertRaises(t.KaException):
+        _ = list(t.printinfo(info, today, soup))
+    self.maxDiff = None
+    #print(mock_open.mock_calls)
+    self.assertEqual(mock_open.mock_calls, [
+        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.html', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('<html>\n</html>'),
+        mock.call().__exit__(None, None, None),
+        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.json', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('{}'),
+        mock.call().__exit__(None, None, None)])
+
 if __name__ == '__main__':
   unittest.main()
