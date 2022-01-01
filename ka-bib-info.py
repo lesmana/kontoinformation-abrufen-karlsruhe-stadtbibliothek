@@ -124,18 +124,14 @@ def getinfoexcept(soup):
   info = {'user': userinfo, 'items': iteminfo}
   return info
 
-def dumpfile(name, text):
-  with open(name, 'wt') as openfile:
-    openfile.write(text)
-
 def getinfo(soup, today):
   try:
     return getinfoexcept(soup)
   except Exception as e:
     now = today.isoformat(timespec='seconds')
     name = f'ka-bib-info-error-dump-{now}.html'
-    text = soup.prettify()
-    dumpfile(name, text)
+    with open(name, 'wt') as openfile:
+      openfile.write(soup.prettify())
     raise KaException(
           f'error getting info from soup. '
           f'html written to file {name}') from e
@@ -186,11 +182,11 @@ def printinfo(info, today, soup):
   except Exception as e:
     now = today.isoformat(timespec='seconds')
     htmlname = f'ka-bib-info-error-dump-{now}.html'
-    htmltext = soup.prettify()
-    dumpfile(htmlname, htmltext)
+    with open(htmlname, 'wt') as openfile:
+      openfile.write(soup.prettify())
     jsonname = f'ka-bib-info-error-dump-{now}.json'
-    jsontext = json.dumps(info, indent=4)
-    dumpfile(jsonname, jsontext)
+    with open(jsonname, 'wt') as openfile:
+      openfile.write(json.dumps(info, indent=4))
     raise KaException(
           f'error printing info from json. '
           f'html written to file {htmlname}. '
