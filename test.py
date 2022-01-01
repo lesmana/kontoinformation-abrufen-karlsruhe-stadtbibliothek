@@ -294,5 +294,43 @@ class TestPrintItemInfo(unittest.TestCase):
     with self.assertRaises(KeyError):
       _ = list(t.printiteminfo(iteminfo, today))
 
+class TestPrintInfo(unittest.TestCase):
+
+  def test_normal(self):
+    info = {
+      'user': {
+        'name': 'voller name',
+        'expire': '01.11.2021'
+      },
+      'items': [
+        {
+          'duedate': '01.05.2021',
+          'fromlib': 'bibnamelang1',
+          'title': 'medientyp1: titel1 abgeschnitt'
+        },
+        {
+          'duedate': '02.05.2021',
+          'fromlib': 'bibnamelang2',
+          'title': 'medientyp2: titel2 abgeschnitt'
+        }
+      ]
+    }
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    lines = list(t.printinfo(info, today, None))
+    expectedlines = [
+      'name: voller name',
+      '',
+      'titel: medientyp1: titel1 abgeschnitt',
+      'fällig in 11 tagen (01.05.2021)',
+      'bib: bibnamelang1',
+      '',
+      'titel: medientyp2: titel2 abgeschnitt',
+      'fällig in 12 tagen (02.05.2021)',
+      'bib: bibnamelang2',
+      ''
+    ]
+    self.maxDiff = None
+    self.assertEqual(lines, expectedlines)
+
 if __name__ == '__main__':
   unittest.main()
