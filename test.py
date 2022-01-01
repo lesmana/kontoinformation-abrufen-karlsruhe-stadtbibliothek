@@ -14,7 +14,7 @@ class TestGetUserInfo(unittest.TestCase):
   def test_normal(self):
     with open('testfiles/ausweis-normal.html') as openfile:
       htmlstr = openfile.read()
-    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    usersoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     userinfo = t.getuserinfo(usersoup)
     expecteduserinfo = {
       'name': 'voller name',
@@ -25,7 +25,7 @@ class TestGetUserInfo(unittest.TestCase):
   def test_gebuehren(self):
     with open('testfiles/ausweis-gebuehren.html') as openfile:
       htmlstr = openfile.read()
-    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    usersoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     userinfo = t.getuserinfo(usersoup)
     expecteduserinfo = {
       'name': 'voller name',
@@ -38,7 +38,7 @@ class TestGetUserInfo(unittest.TestCase):
     # parsing ausleihe not implemented yet
     with open('testfiles/ausweis-ausleihe.html') as openfile:
       htmlstr = openfile.read()
-    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    usersoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     userinfo = t.getuserinfo(usersoup)
     expecteduserinfo = {
       'name': 'voller name',
@@ -48,7 +48,7 @@ class TestGetUserInfo(unittest.TestCase):
 
   def test_emptyhtml(self):
     htmlstr = '<table></table>'
-    usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    usersoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     with self.assertRaises(IndexError):
       _ = t.getuserinfo(usersoup)
 
@@ -57,7 +57,7 @@ class TestGetItemInfo(unittest.TestCase):
   def test_normal(self):
     with open('testfiles/ausleih-normal.html') as openfile:
       htmlstr = openfile.read()
-    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    itemsoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = [
       {
@@ -82,7 +82,7 @@ class TestGetItemInfo(unittest.TestCase):
     # returns empty list instead
     with open('testfiles/ausleih-missingitems.html') as openfile:
       htmlstr = openfile.read()
-    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    itemsoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
@@ -91,7 +91,7 @@ class TestGetItemInfo(unittest.TestCase):
     # this is also not realistic error
     # but test robustness of code nonetheless
     htmlstr = '<table></table>'
-    itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    itemsoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = []
     self.assertEqual(iteminfo, expectediteminfo)
@@ -101,7 +101,7 @@ class TestGetInfo(unittest.TestCase):
   def test_normal(self):
     with open('testfiles/alles-normal.html') as openfile:
       htmlstr = openfile.read()
-    soup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     info = t.getinfo(soup, None)
     expectedinfo = {
       'user': {
@@ -126,7 +126,7 @@ class TestGetInfo(unittest.TestCase):
 
   def test_error(self):
     htmlstr = '<html></html>'
-    soup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     mock_open = mock.mock_open()
     with mock.patch('__main__.t.open', mock_open):
