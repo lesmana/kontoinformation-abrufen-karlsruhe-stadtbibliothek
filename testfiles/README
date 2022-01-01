@@ -3,7 +3,6 @@ these files are used by unittest in test.py
 typically a unittest should be self contained
 means all data it needs should be in the unittest
 but the html code is many lines long
-and the differences are not easily visible
+so put html code is in separate files
 
-that is why the html code is put in separate files
-for easy comparing using diff tools
+bonus: easy comparing using diff tools
