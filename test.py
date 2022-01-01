@@ -130,7 +130,7 @@ class TestGetInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     mock_open = mock.mock_open()
     with mock.patch('__main__.t.open', mock_open):
-      with self.assertRaises(Exception):
+      with self.assertRaises(t.KaException):
         _ = t.getinfo(soup, today)
     self.maxDiff = None
     self.assertEqual(mock_open.mock_calls, [

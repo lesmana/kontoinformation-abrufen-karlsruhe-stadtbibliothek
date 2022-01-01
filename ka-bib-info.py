@@ -12,6 +12,9 @@ import json
 
 url = 'https://opac.karlsruhe.de/opax/user.C'
 
+class KaException(Exception):
+  pass
+
 def getargv(argv):
   class HandleUsername(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -40,7 +43,7 @@ def getsoupfromfile(htmlfilename):
     with open(htmlfilename) as openfile:
       soup = bs4.BeautifulSoup(openfile.read(), 'html.parser')
   except:
-    raise Exception('error trying to read html from file', htmlfilename)
+    raise KaException('error trying to read html from file', htmlfilename)
   return soup
 
 def getlogindata(secretfilename):
@@ -48,7 +51,7 @@ def getlogindata(secretfilename):
     with open(secretfilename) as openfile:
       username, password = openfile.read().splitlines()
   except:
-    raise Exception('error trying to read credentials from file', secretfilename)
+    raise KaException('error trying to read credentials from file', secretfilename)
   return username, password
 
 def getsoupfrominternets(secretfilename, url):
@@ -62,7 +65,7 @@ def getsoupfrominternets(secretfilename, url):
   }
   response = session.post(url, data=formdata)
   if response.status_code != 200:
-    raise Exception('response status code not 200', response)
+    raise KaException('response status code not 200', response)
   soup = bs4.BeautifulSoup(response.content, 'html.parser')
   return soup
 
@@ -74,7 +77,7 @@ def gettables(soup):
   elif len(tables) == 2:
     itemsoup = tables[1]
   else:
-    raise Exception('unexpected number of tables', tables)
+    raise KaException('unexpected number of tables', tables)
   return usersoup, itemsoup
 
 def getuserinfo(usersoup):
@@ -133,7 +136,7 @@ def getinfo(soup, today):
     name = f'ka-bib-info-error-dump-{now}.html'
     text = soup.prettify()
     dumpfile(name, text)
-    raise Exception(
+    raise KaException(
           f'error getting info from soup. '
           f'html written to file {name}') from e
 
@@ -192,7 +195,7 @@ def printinfo(info, today, soup):
     jsonname = f'ka-bib-info-error-dump-{now}.json'
     jsontext = json.dumps(info, indent=4)
     dumpfile(jsonname, jsontext)
-    raise Exception(
+    raise KaException(
           f'error printing info from json. '
           f'html written to file {htmlname}. '
           f'json written to file {jsonname}.'
