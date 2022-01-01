@@ -3,6 +3,8 @@
 import unittest
 import datetime
 
+from unittest import mock
+
 import bs4
 
 t = __import__('ka-bib-info')
@@ -122,6 +124,21 @@ class TestGetInfo(unittest.TestCase):
     }
     self.maxDiff = None
     self.assertEqual(info, expectedinfo)
+
+  def test_error(self):
+    htmlstr = '<html></html>'
+    soup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    mock_open = mock.mock_open()
+    with mock.patch('__main__.t.open', mock_open):
+      with self.assertRaises(Exception):
+        _ = t.getinfo(soup, today)
+    self.maxDiff = None
+    self.assertEqual(mock_open.mock_calls, [
+        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.html', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('<html>\n</html>'),
+        mock.call().__exit__(None, None, None)])
 
 class TestPrintUserInfo(unittest.TestCase):
 
