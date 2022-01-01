@@ -15,7 +15,7 @@ url = 'https://opac.karlsruhe.de/opax/user.C'
 class KaException(Exception):
   pass
 
-def getargv(argv):
+def getargv():
   class HandleUsername(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
       secretfilename = values if values.endswith('.secret') else values + '.secret'
@@ -193,7 +193,7 @@ def printinfo(info, today, soup):
           ) from e
 
 def main():
-  options = getargv(sys.argv)
+  options = getargv()
   if options.htmlfilename is not None:
     htmlstr = gethtmlfromfile(options.htmlfilename)
   else:
