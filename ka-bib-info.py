@@ -38,13 +38,13 @@ def getargv(argv):
   args.url = url
   return args
 
-def getsoupfromfile(htmlfilename):
+def gethtmlfromfile(htmlfilename):
   try:
     with open(htmlfilename) as openfile:
-      soup = bs4.BeautifulSoup(openfile.read(), 'html.parser')
+      htmlstr = openfile.read()
   except:
     raise KaException('error trying to read html from file', htmlfilename)
-  return soup
+  return htmlstr
 
 def getlogindata(secretfilename):
   try:
@@ -54,7 +54,7 @@ def getlogindata(secretfilename):
     raise KaException('error trying to read credentials from file', secretfilename)
   return username, password
 
-def getsoupfrominternets(secretfilename, url):
+def gethtmlfrominternets(secretfilename, url):
   username, password = getlogindata(secretfilename)
   session = requests.Session()
   formdata = {
@@ -66,8 +66,7 @@ def getsoupfrominternets(secretfilename, url):
   response = session.post(url, data=formdata)
   if response.status_code != 200:
     raise KaException('response status code not 200', response)
-  soup = bs4.BeautifulSoup(response.content, 'html.parser')
-  return soup
+  return response.content
 
 def gettables(soup):
   tables = soup.find_all('table', attrs={'class': 'tab21'})
@@ -196,9 +195,10 @@ def printinfo(info, today, soup):
 def main():
   options = getargv(sys.argv)
   if options.htmlfilename is not None:
-    soup = getsoupfromfile(options.htmlfilename)
+    htmlstr = gethtmlfromfile(options.htmlfilename)
   else:
-    soup = getsoupfrominternets(options.secretfilename, options.url)
+    htmlstr = gethtmlfrominternets(options.secretfilename, options.url)
+  soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   if options.dumphtml:
     print(soup.prettify())
     return
