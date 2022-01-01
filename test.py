@@ -89,8 +89,7 @@ class TestGetItemInfo(unittest.TestCase):
 
   def test_emptyhtml(self):
     # this is also not realistic error
-    # because why should html be empty
-    # but test error handling nonetheless
+    # but test robustness of code nonetheless
     htmlstr = '<table></table>'
     itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
