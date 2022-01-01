@@ -9,6 +9,9 @@ import bs4
 
 t = __import__('ka-bib-info')
 
+# some html test data in files because long
+# also in files can see diff using diff tools
+
 class TestGetUserInfo(unittest.TestCase):
 
   def test_normal(self):
@@ -47,6 +50,8 @@ class TestGetUserInfo(unittest.TestCase):
     self.assertEqual(userinfo, expecteduserinfo)
 
   def test_emptyhtml(self):
+    # test error handling of code
+    # if html not containing expected tags
     htmlstr = '<table></table>'
     usersoup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     with self.assertRaises(IndexError):
@@ -102,6 +107,8 @@ class TestGetInfo(unittest.TestCase):
     with open('testfiles/alles-normal.html') as openfile:
       htmlstr = openfile.read()
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+    # second parameter is today
+    # which is only relevant in case of error
     info = t.getinfo(soup, None)
     expectedinfo = {
       'user': {
@@ -125,6 +132,10 @@ class TestGetInfo(unittest.TestCase):
     self.assertEqual(info, expectedinfo)
 
   def test_error(self):
+    # test error handling
+    # in case html does not contain expected tags
+    # error handling dumps the html to file
+    # it mocks open using mock_open
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
@@ -316,6 +327,8 @@ class TestPrintInfo(unittest.TestCase):
       ]
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    # third parameter is soup object
+    # which is only relevant in case of error
     lines = list(t.printinfo(info, today, None))
     expectedlines = [
       'name: voller name',
@@ -333,6 +346,14 @@ class TestPrintInfo(unittest.TestCase):
     self.assertEqual(lines, expectedlines)
 
   def test_error(self):
+    # test error handling
+    # in case info dict makes no sense
+    # execution can only reach this state
+    # if html was well formed enough that it did not abort before
+    # but extracted values in dict then make no sense
+    # error handling will dump html and json to file
+    # so mock open using mock_open
+    # also prepare tiny soup object for dumping html
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     info = {} # this is the error
