@@ -42,16 +42,16 @@ def gethtmlfromfile(htmlfilename):
   try:
     with open(htmlfilename) as openfile:
       htmlstr = openfile.read()
-  except:
-    raise KaException('error trying to read html from file', htmlfilename)
+  except Exception as e:
+    raise KaException('error trying to read html from file', htmlfilename) from e
   return htmlstr
 
 def getlogindata(secretfilename):
   try:
     with open(secretfilename) as openfile:
       username, password = openfile.read().splitlines()
-  except:
-    raise KaException('error trying to read credentials from file', secretfilename)
+  except Exception as e:
+    raise KaException('error trying to read credentials from file', secretfilename) from e
   return username, password
 
 def gethtmlfrominternets(secretfilename, url):
