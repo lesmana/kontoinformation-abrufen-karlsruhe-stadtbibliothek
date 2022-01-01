@@ -1,5 +1,10 @@
 #! /usr/bin/env python3
 
+# ka-bib-info
+# Copyright Lesmana Zimmer lesmana@gmx.de
+# Licensed under GNU AGPL version 3 or later
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 import unittest
 import datetime
 

@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# ka-bib-info
+# Copyright Lesmana Zimmer lesmana@gmx.de
+# Licensed under GNU AGPL version 3 or later
+# https://www.gnu.org/licenses/agpl-3.0.html
+
 import sys
 import requests
 import bs4
