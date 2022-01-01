@@ -145,7 +145,7 @@ class TestGetInfo(unittest.TestCase):
         _ = t.getinfo(soup, today)
     self.maxDiff = None
     self.assertEqual(mock_open.mock_calls, [
-        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.html', 'wt'),
+        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
         mock.call().__enter__(),
         mock.call().write('<html>\n</html>'),
         mock.call().__exit__(None, None, None)])
@@ -365,11 +365,11 @@ class TestPrintInfo(unittest.TestCase):
     self.maxDiff = None
     #print(mock_open.mock_calls)
     self.assertEqual(mock_open.mock_calls, [
-        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.html', 'wt'),
+        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
         mock.call().__enter__(),
         mock.call().write('<html>\n</html>'),
         mock.call().__exit__(None, None, None),
-        mock.call('ka-bib-info-error-dump-2021-04-20T00:00:00.json', 'wt'),
+        mock.call('ka-bib-info-error-dump-20210420000000.json', 'wt'),
         mock.call().__enter__(),
         mock.call().write('{}'),
         mock.call().__exit__(None, None, None)])

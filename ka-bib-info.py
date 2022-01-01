@@ -127,7 +127,7 @@ def getinfo(soup, today):
   try:
     return getinfoexcept(soup)
   except Exception as e:
-    now = today.isoformat(timespec='seconds')
+    now = today.strftime('%Y%m%d%H%M%S')
     name = f'ka-bib-info-error-dump-{now}.html'
     with open(name, 'wt') as openfile:
       openfile.write(soup.prettify())
@@ -179,7 +179,7 @@ def printinfo(info, today, soup):
   try:
     yield from printinfoexcept(info, today)
   except Exception as e:
-    now = today.isoformat(timespec='seconds')
+    now = today.strftime('%Y%m%d%H%M%S')
     htmlname = f'ka-bib-info-error-dump-{now}.html'
     with open(htmlname, 'wt') as openfile:
       openfile.write(soup.prettify())
