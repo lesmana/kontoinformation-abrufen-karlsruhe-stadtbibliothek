@@ -47,7 +47,7 @@ class TestGetUserInfo(unittest.TestCase):
     self.assertEqual(userinfo, expecteduserinfo)
 
   def test_emptyhtml(self):
-    htmlstr = ''
+    htmlstr = '<table></table>'
     usersoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     with self.assertRaises(IndexError):
       _ = t.getuserinfo(usersoup)
@@ -91,7 +91,7 @@ class TestGetItemInfo(unittest.TestCase):
     # this is also not realistic error
     # because why should html be empty
     # but test error handling nonetheless
-    htmlstr = ''
+    htmlstr = '<table></table>'
     itemsoup =  bs4.BeautifulSoup(htmlstr, 'html.parser')
     iteminfo = t.getiteminfo(itemsoup)
     expectediteminfo = []
