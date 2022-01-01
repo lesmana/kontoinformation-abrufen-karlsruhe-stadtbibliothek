@@ -16,14 +16,14 @@ class KaException(Exception):
   pass
 
 def getargv():
-  class HandleUsername(argparse.Action):
+  class HandleSecretFile(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
       secretfilename = values if values.endswith('.secret') else values + '.secret'
       namespace.secretfilename = secretfilename
   parser = argparse.ArgumentParser()
-  parser.add_argument('username',
-        action=HandleUsername,
-        help='name of user to get info for')
+  parser.add_argument('secretfile',
+        action=HandleSecretFile,
+        help='secret file with credentials to get info for')
   parser.add_argument('--dumphtml',
         action='store_true',
         help='just dump html instead extracting info')
