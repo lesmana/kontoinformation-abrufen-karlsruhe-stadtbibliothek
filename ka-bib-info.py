@@ -14,16 +14,29 @@ import datetime
 import types
 import argparse
 import json
+import os
 
 url = 'https://opac.karlsruhe.de/opax/user.C'
 
 class KaException(Exception):
   pass
 
+def getsecretfilename(filename):
+  if os.path.isabs(filename):
+    return filename
+  if os.path.isfile(filename):
+    return filename
+  secretdir = os.getenv('KABIBINFOSECRETDIR')
+  if secretdir is not None:
+    secretfilename = os.path.join(secretdir, filename)
+    if os.path.isfile(secretfilename):
+       return secretfilename
+  return filename
+
 def getargv():
   class HandleSecretFile(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
-      secretfilename = values if values.endswith('.secret') else values + '.secret'
+      secretfilename = getsecretfilename(values)
       namespace.secretfilename = secretfilename
   parser = argparse.ArgumentParser()
   parser.add_argument('secretfile',
