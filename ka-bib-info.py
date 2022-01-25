@@ -21,18 +21,6 @@ url = 'https://opac.karlsruhe.de/opax/user.C'
 class KaException(Exception):
   pass
 
-def getsecretfilename(filename):
-  if os.path.isabs(filename):
-    return filename
-  if os.path.isfile(filename):
-    return filename
-  secretdir = os.getenv('KABIBINFOSECRETDIR')
-  if secretdir is not None:
-    secretfilename = os.path.join(secretdir, filename)
-    if os.path.isfile(secretfilename):
-       return secretfilename
-  return filename
-
 def getargv():
   parser = argparse.ArgumentParser()
   parser.add_argument('secretfilename',
@@ -58,6 +46,18 @@ def gethtmlfromfile(htmlfilename):
   except Exception as e:
     raise KaException('error trying to read html from file', htmlfilename) from e
   return htmlstr
+
+def getsecretfilename(filename):
+  if os.path.isabs(filename):
+    return filename
+  if os.path.isfile(filename):
+    return filename
+  secretdir = os.getenv('KABIBINFOSECRETDIR')
+  if secretdir is not None:
+    secretfilename = os.path.join(secretdir, filename)
+    if os.path.isfile(secretfilename):
+       return secretfilename
+  return filename
 
 def getlogindata(secretfilename):
   try:
