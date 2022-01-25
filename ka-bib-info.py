@@ -34,13 +34,8 @@ def getsecretfilename(filename):
   return filename
 
 def getargv():
-  class HandleSecretFile(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-      secretfilename = getsecretfilename(values)
-      namespace.secretfilename = secretfilename
   parser = argparse.ArgumentParser()
-  parser.add_argument('secretfile',
-        action=HandleSecretFile,
+  parser.add_argument('secretfilename',
         help='secret file with credentials to get info for')
   parser.add_argument('--dumphtml',
         action='store_true',
@@ -73,6 +68,7 @@ def getlogindata(secretfilename):
   return username, password
 
 def gethtmlfrominternets(secretfilename, url):
+  secretfilename = getsecretfilename(secretfilename)
   username, password = getlogindata(secretfilename)
   session = requests.Session()
   formdata = {
