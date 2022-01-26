@@ -193,6 +193,9 @@ def printinfo(info, today, soup):
   try:
     yield from printinfoexcept(info, today)
   except Exception as e:
+    printinfohandleexception(info, today, soup, e)
+
+def printinfohandleexception(info, today, soup, e):
     now = today.strftime('%Y%m%d%H%M%S')
     htmlname = f'ka-bib-info-error-dump-{now}.html'
     with open(htmlname, 'wt') as openfile:
