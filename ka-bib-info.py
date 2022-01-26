@@ -141,6 +141,9 @@ def getinfo(soup, today):
   try:
     return getinfoexcept(soup)
   except Exception as e:
+    dumpfile(soup, today, e)
+
+def dumpfile(soup, today, e):
     now = today.strftime('%Y%m%d%H%M%S')
     name = f'ka-bib-info-error-dump-{now}.html'
     with open(name, 'wt') as openfile:
