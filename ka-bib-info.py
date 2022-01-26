@@ -203,7 +203,7 @@ def main():
   soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
   if options.dumphtml:
     print(soup.prettify())
-    return
+    return 0
   today = datetime.datetime.today()
   try:
     info = getinfo(soup)
@@ -212,10 +212,10 @@ def main():
     print(
           f'error getting info from soup. '
           f'html written to file {name}')
-    return
+    return 1
   if options.printjson:
     print(json.dumps(info, indent=4))
-    return
+    return 0
   try:
     for line in printinfo(info, today):
       print(line)
@@ -226,6 +226,9 @@ def main():
           f'html written to file {htmlname}. '
           f'json written to file {jsonname}.'
           )
+    return 1
+  return 0
 
 if __name__ == '__main__':
-  main()
+  exitstatus = main()
+  sys.exit(exitstatus)
