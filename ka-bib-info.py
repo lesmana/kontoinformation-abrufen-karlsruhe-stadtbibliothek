@@ -183,7 +183,7 @@ def printiteminfo(iteminfo, today):
     yield from printoneiteminfo(item, today)
     yield ''
 
-def printinfo(info, today, soup):
+def printinfo(info, today):
   userinfo = info['user']
   yield from printuserinfo(userinfo, today)
   iteminfo = info['items']
@@ -215,7 +215,7 @@ def main():
     print(json.dumps(info, indent=4))
     return
   try:
-    for line in printinfo(info, today, soup):
+    for line in printinfo(info, today):
       print(line)
   except Exception:
     htmlname, jsonname = printinfohandleexception(info, today, soup)

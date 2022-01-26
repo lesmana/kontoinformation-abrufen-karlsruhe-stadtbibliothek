@@ -332,9 +332,7 @@ class TestPrintInfo(unittest.TestCase):
       ]
     }
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    # third parameter is soup object
-    # which is only relevant in case of error
-    lines = list(t.printinfo(info, today, None))
+    lines = list(t.printinfo(info, today))
     expectedlines = [
       'name: voller name',
       '',
