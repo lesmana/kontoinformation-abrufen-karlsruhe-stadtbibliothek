@@ -348,6 +348,8 @@ class TestPrintInfo(unittest.TestCase):
     self.maxDiff = None
     self.assertEqual(lines, expectedlines)
 
+class TestErrorHandling(unittest.TestCase):
+
   def test_dumpfiles(self):
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
