@@ -127,7 +127,7 @@ def getiteminfo(itemsoup):
     iteminfo.append(item)
   return iteminfo
 
-def getinfoexcept(soup):
+def getinfo(soup, today):
   usersoup, itemsoup = gettables(soup)
   userinfo = getuserinfo(usersoup)
   if itemsoup is not None:
@@ -136,15 +136,6 @@ def getinfoexcept(soup):
     iteminfo = []
   info = {'user': userinfo, 'items': iteminfo}
   return info
-
-def getinfo(soup, today):
-  try:
-    return getinfoexcept(soup)
-  except Exception as e:
-    name = dumpfile(soup, today)
-    raise KaException(
-          f'error getting info from soup. '
-          f'html written to file {name}') from e
 
 def dumpfile(soup, today):
   now = today.strftime('%Y%m%d%H%M%S')
@@ -214,7 +205,13 @@ def main():
     print(soup.prettify())
     return
   today = datetime.datetime.today()
-  info = getinfo(soup, today)
+  try:
+    info = getinfo(soup, today)
+  except Exception as e:
+    name = dumpfile(soup, today)
+    raise KaException(
+          f'error getting info from soup. '
+          f'html written to file {name}') from e
   if options.printjson:
     print(json.dumps(info, indent=4))
     return
