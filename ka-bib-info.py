@@ -189,7 +189,7 @@ def printinfo(info, today):
   iteminfo = info['items']
   yield from printiteminfo(iteminfo, today)
 
-def dumpfiles(info, today, soup):
+def dumpfiles(soup, info, today):
   now = today.strftime('%Y%m%d%H%M%S')
   htmlname = f'ka-bib-info-error-dump-{now}.html'
   with open(htmlname, 'wt') as openfile:
@@ -218,7 +218,7 @@ def main():
     for line in printinfo(info, today):
       print(line)
   except Exception:
-    htmlname, jsonname = dumpfiles(info, today, soup)
+    htmlname, jsonname = dumpfiles(soup, info, today)
     print(
           f'error printing info from json. '
           f'html written to file {htmlname}. '

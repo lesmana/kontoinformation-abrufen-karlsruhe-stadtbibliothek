@@ -355,7 +355,7 @@ class TestPrintInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     mock_open = mock.mock_open()
     with mock.patch('__main__.t.open', mock_open):
-      htmlname, jsonname = t.dumpfiles(info, today, soup)
+      htmlname, jsonname = t.dumpfiles(soup, info, today)
     self.maxDiff = None
     #print(mock_open.mock_calls)
     self.assertEqual(mock_open.mock_calls, [
