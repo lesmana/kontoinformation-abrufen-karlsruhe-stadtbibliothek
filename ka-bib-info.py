@@ -147,11 +147,11 @@ def getinfo(soup, today):
           f'html written to file {name}') from e
 
 def dumpfile(soup, today):
-    now = today.strftime('%Y%m%d%H%M%S')
-    name = f'ka-bib-info-error-dump-{now}.html'
-    with open(name, 'wt') as openfile:
-      openfile.write(soup.prettify())
-    return name
+  now = today.strftime('%Y%m%d%H%M%S')
+  name = f'ka-bib-info-error-dump-{now}.html'
+  with open(name, 'wt') as openfile:
+    openfile.write(soup.prettify())
+  return name
 
 def printuserinfo(userinfo, today):
   name = userinfo['name']
