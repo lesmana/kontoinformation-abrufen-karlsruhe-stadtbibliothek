@@ -379,5 +379,26 @@ class TestPrintInfo(unittest.TestCase):
         mock.call().write('{}'),
         mock.call().__exit__(None, None, None)])
 
+  def test_handleexception(self):
+    htmlstr = '<html></html>'
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+    info = {}
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    mock_open = mock.mock_open()
+    with mock.patch('__main__.t.open', mock_open):
+      with self.assertRaises(t.KaException):
+        t.printinfohandleexception(info, today, soup, Exception('aaaa'))
+    self.maxDiff = None
+    #print(mock_open.mock_calls)
+    self.assertEqual(mock_open.mock_calls, [
+        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('<html>\n</html>'),
+        mock.call().__exit__(None, None, None),
+        mock.call('ka-bib-info-error-dump-20210420000000.json', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('{}'),
+        mock.call().__exit__(None, None, None)])
+
 if __name__ == '__main__':
   unittest.main()
