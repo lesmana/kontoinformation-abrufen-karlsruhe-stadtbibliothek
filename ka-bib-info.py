@@ -141,16 +141,17 @@ def getinfo(soup, today):
   try:
     return getinfoexcept(soup)
   except Exception as e:
-    dumpfile(soup, today, e)
+    name = dumpfile(soup, today)
+    raise KaException(
+          f'error getting info from soup. '
+          f'html written to file {name}') from e
 
-def dumpfile(soup, today, e):
+def dumpfile(soup, today):
     now = today.strftime('%Y%m%d%H%M%S')
     name = f'ka-bib-info-error-dump-{now}.html'
     with open(name, 'wt') as openfile:
       openfile.write(soup.prettify())
-    raise KaException(
-          f'error getting info from soup. '
-          f'html written to file {name}') from e
+    return name
 
 def printuserinfo(userinfo, today):
   name = userinfo['name']
