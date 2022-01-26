@@ -329,7 +329,7 @@ class TestPrintInfo(unittest.TestCase):
 
 class TestErrorHandling(unittest.TestCase):
 
-  def test_handleerror(self):
+  def test_handleerroraftergetinfo(self):
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
@@ -344,7 +344,7 @@ class TestErrorHandling(unittest.TestCase):
         mock.call().__exit__(None, None, None)])
     self.assertEqual(htmlname, 'ka-bib-info-error-dump-20210420000000.html')
 
-  def test_dumpfiles(self):
+  def test_handleerrorafterprintinfo(self):
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     info = {}
