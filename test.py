@@ -134,21 +134,6 @@ class TestGetInfo(unittest.TestCase):
     self.maxDiff = None
     self.assertEqual(info, expectedinfo)
 
-  def test_handleerror(self):
-    htmlstr = '<html></html>'
-    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    mock_open = mock.mock_open()
-    with mock.patch('__main__.t.open', mock_open):
-      htmlname = t.dumpfile(soup, today)
-    self.maxDiff = None
-    self.assertEqual(mock_open.mock_calls, [
-        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
-        mock.call().__enter__(),
-        mock.call().write('<html>\n</html>'),
-        mock.call().__exit__(None, None, None)])
-    self.assertEqual(htmlname, 'ka-bib-info-error-dump-20210420000000.html')
-
 class TestPrintUserInfo(unittest.TestCase):
 
   def test_normal(self):
@@ -343,6 +328,21 @@ class TestPrintInfo(unittest.TestCase):
     self.assertEqual(lines, expectedlines)
 
 class TestErrorHandling(unittest.TestCase):
+
+  def test_handleerror(self):
+    htmlstr = '<html></html>'
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    mock_open = mock.mock_open()
+    with mock.patch('__main__.t.open', mock_open):
+      htmlname = t.dumpfile(soup, today)
+    self.maxDiff = None
+    self.assertEqual(mock_open.mock_calls, [
+        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('<html>\n</html>'),
+        mock.call().__exit__(None, None, None)])
+    self.assertEqual(htmlname, 'ka-bib-info-error-dump-20210420000000.html')
 
   def test_dumpfiles(self):
     htmlstr = '<html></html>'
