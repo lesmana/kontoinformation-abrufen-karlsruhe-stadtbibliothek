@@ -350,35 +350,6 @@ class TestPrintInfo(unittest.TestCase):
     self.maxDiff = None
     self.assertEqual(lines, expectedlines)
 
-  def test_error(self):
-    # test error handling
-    # in case info dict makes no sense
-    # execution can only reach this state
-    # if html was well formed enough that it did not abort before
-    # but extracted values in dict then make no sense
-    # error handling will dump html and json to file
-    # so mock open using mock_open
-    # also prepare tiny soup object for dumping html
-    htmlstr = '<html></html>'
-    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-    info = {} # this is the error
-    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
-    mock_open = mock.mock_open()
-    with mock.patch('__main__.t.open', mock_open):
-      with self.assertRaises(t.KaException):
-        _ = list(t.printinfo(info, today, soup))
-    self.maxDiff = None
-    #print(mock_open.mock_calls)
-    self.assertEqual(mock_open.mock_calls, [
-        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
-        mock.call().__enter__(),
-        mock.call().write('<html>\n</html>'),
-        mock.call().__exit__(None, None, None),
-        mock.call('ka-bib-info-error-dump-20210420000000.json', 'wt'),
-        mock.call().__enter__(),
-        mock.call().write('{}'),
-        mock.call().__exit__(None, None, None)])
-
   def test_handleexception(self):
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')

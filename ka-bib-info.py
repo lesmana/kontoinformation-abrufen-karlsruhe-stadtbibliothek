@@ -183,22 +183,11 @@ def printiteminfo(iteminfo, today):
     yield from printoneiteminfo(item, today)
     yield ''
 
-def printinfoexcept(info, today):
+def printinfo(info, today, soup):
   userinfo = info['user']
   yield from printuserinfo(userinfo, today)
   iteminfo = info['items']
   yield from printiteminfo(iteminfo, today)
-
-def printinfo(info, today, soup):
-  try:
-    yield from printinfoexcept(info, today)
-  except Exception as e:
-    htmlname, jsonname = printinfohandleexception(info, today, soup)
-    raise KaException(
-          f'error printing info from json. '
-          f'html written to file {htmlname}. '
-          f'json written to file {jsonname}.'
-          ) from e
 
 def printinfohandleexception(info, today, soup):
   now = today.strftime('%Y%m%d%H%M%S')
@@ -225,8 +214,16 @@ def main():
   if options.printjson:
     print(json.dumps(info, indent=4))
     return
-  for line in printinfo(info, today, soup):
-    print(line)
+  try:
+    for line in printinfo(info, today, soup):
+      print(line)
+  except:
+    htmlname, jsonname = printinfohandleexception(info, today, soup)
+    raise KaException(
+          f'error printing info from json. '
+          f'html written to file {htmlname}. '
+          f'json written to file {jsonname}.'
+          ) from e
 
 if __name__ == '__main__':
   main()
