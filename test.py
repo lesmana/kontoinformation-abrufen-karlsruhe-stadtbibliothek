@@ -348,14 +348,14 @@ class TestPrintInfo(unittest.TestCase):
     self.maxDiff = None
     self.assertEqual(lines, expectedlines)
 
-  def test_handleexception(self):
+  def test_dumpfiles(self):
     htmlstr = '<html></html>'
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
     info = {}
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     mock_open = mock.mock_open()
     with mock.patch('__main__.t.open', mock_open):
-      htmlname, jsonname = t.printinfohandleexception(info, today, soup)
+      htmlname, jsonname = t.dumpfiles(info, today, soup)
     self.maxDiff = None
     #print(mock_open.mock_calls)
     self.assertEqual(mock_open.mock_calls, [
