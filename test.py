@@ -112,9 +112,7 @@ class TestGetInfo(unittest.TestCase):
     with open('testfiles/alles-normal.html') as openfile:
       htmlstr = openfile.read()
     soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
-    # second parameter is today
-    # which is only relevant in case of error
-    info = t.getinfo(soup, None)
+    info = t.getinfo(soup)
     expectedinfo = {
       'user': {
         'name': 'voller name',

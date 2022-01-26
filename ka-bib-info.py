@@ -127,7 +127,7 @@ def getiteminfo(itemsoup):
     iteminfo.append(item)
   return iteminfo
 
-def getinfo(soup, today):
+def getinfo(soup):
   usersoup, itemsoup = gettables(soup)
   userinfo = getuserinfo(usersoup)
   if itemsoup is not None:
@@ -206,7 +206,7 @@ def main():
     return
   today = datetime.datetime.today()
   try:
-    info = getinfo(soup, today)
+    info = getinfo(soup)
   except Exception as e:
     name = dumpfile(soup, today)
     raise KaException(
