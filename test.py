@@ -155,6 +155,21 @@ class TestGetInfo(unittest.TestCase):
         mock.call().write('<html>\n</html>'),
         mock.call().__exit__(None, None, None)])
 
+  def test_handleerror(self):
+    htmlstr = '<html></html>'
+    soup = bs4.BeautifulSoup(htmlstr, 'html.parser')
+    today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
+    mock_open = mock.mock_open()
+    with mock.patch('__main__.t.open', mock_open):
+      with self.assertRaises(t.KaException):
+        _ = t.dumpfile(soup, today, Exception('aaaa'))
+    self.maxDiff = None
+    self.assertEqual(mock_open.mock_calls, [
+        mock.call('ka-bib-info-error-dump-20210420000000.html', 'wt'),
+        mock.call().__enter__(),
+        mock.call().write('<html>\n</html>'),
+        mock.call().__exit__(None, None, None)])
+
 class TestPrintUserInfo(unittest.TestCase):
 
   def test_normal(self):
