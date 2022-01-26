@@ -386,7 +386,7 @@ class TestPrintInfo(unittest.TestCase):
     today = datetime.datetime.strptime('20.04.2021', '%d.%m.%Y')
     mock_open = mock.mock_open()
     with mock.patch('__main__.t.open', mock_open):
-      t.printinfohandleexception(info, today, soup)
+      htmlname, jsonname = t.printinfohandleexception(info, today, soup)
     self.maxDiff = None
     #print(mock_open.mock_calls)
     self.assertEqual(mock_open.mock_calls, [
@@ -398,6 +398,8 @@ class TestPrintInfo(unittest.TestCase):
         mock.call().__enter__(),
         mock.call().write('{}'),
         mock.call().__exit__(None, None, None)])
+    self.assertEqual(htmlname, 'ka-bib-info-error-dump-20210420000000.html')
+    self.assertEqual(jsonname, 'ka-bib-info-error-dump-20210420000000.json')
 
 if __name__ == '__main__':
   unittest.main()
