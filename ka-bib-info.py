@@ -219,11 +219,11 @@ def main():
       print(line)
   except:
     htmlname, jsonname = printinfohandleexception(info, today, soup)
-    raise KaException(
+    print(
           f'error printing info from json. '
           f'html written to file {htmlname}. '
           f'json written to file {jsonname}.'
-          ) from e
+          )
 
 if __name__ == '__main__':
   main()
