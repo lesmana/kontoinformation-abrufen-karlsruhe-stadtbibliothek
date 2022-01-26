@@ -217,7 +217,7 @@ def main():
   try:
     for line in printinfo(info, today, soup):
       print(line)
-  except:
+  except Exception:
     htmlname, jsonname = printinfohandleexception(info, today, soup)
     print(
           f'error printing info from json. '
