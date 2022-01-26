@@ -209,9 +209,10 @@ def main():
     info = getinfo(soup)
   except Exception as e:
     name = dumpfile(soup, today)
-    raise KaException(
+    print(
           f'error getting info from soup. '
-          f'html written to file {name}') from e
+          f'html written to file {name}')
+    return
   if options.printjson:
     print(json.dumps(info, indent=4))
     return
